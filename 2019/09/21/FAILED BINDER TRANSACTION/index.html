@@ -4,8 +4,11 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="binder, 蓝色天空">
-    <meta name="description" content="binder | 蓝色天空">
+    <meta name="keywords" content="FAILED BINDER TRANSACTION, 蓝色天空">
+    <meta name="description" content="1.异常Log Pattern
+
+BroadcastQueue: Can&amp;#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
+ActivityManager: Kil">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>binder | 蓝色天空</title>
+    <title>FAILED BINDER TRANSACTION | 蓝色天空</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -284,13 +287,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        binder
+                        FAILED BINDER TRANSACTION
                     </div>
                 </div>
             </div>
@@ -400,9 +403,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Binder/">
+                                <span class="chip bg-color">Binder</span>
+                            </a>
+                        
+                            <a href="/tags/Android-Stability/">
+                                <span class="chip bg-color">Android Stability</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -429,11 +440,155 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3><ul>
-<li><a href="http://dongwang0623.cn/2019/09/21/FAILED%20BINDER%20TRANSACTION/" target="_blank" rel="noopener">FAILED BINDER TRANSACTION</a></li>
-<li><a href="https://note.youdao.com/" target="_blank" rel="noopener">Binder调用结构流程图.md</a></li>
+                <h2 id="1-异常Log-Pattern"><a href="#1-异常Log-Pattern" class="headerlink" title="1.异常Log Pattern"></a>1.异常Log Pattern</h2><a id="more"></a>
+
+<pre><code>BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
+ActivityManager: Killing 8047:com.my.demo/1000 (adj 0): scheduleCrash for &#39;can&#39;t deliver broadcast&#39; failed
+BroadcastQueue: Failure sending broadcast Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) }
+BroadcastQueue: android.os.DeadObjectException: Transaction failed on small parcel; remote process probably died
+BroadcastQueue:     at android.os.BinderProxy.transactNative(Native Method)
+BroadcastQueue:     at android.os.BinderProxy.transact(Binder.java:764)
+BroadcastQueue:     at android.app.IApplicationThread$Stub$Proxy.scheduleRegisteredReceiver(IApplicationThread.java:1560)
+BroadcastQueue:     at com.android.server.am.BroadcastQueue.performReceiveLocked(BroadcastQueue.java:491)
+BroadcastQueue:     at com.android.server.am.BroadcastQueue.deliverToRegisteredReceiverLocked(BroadcastQueue.java:703)
+BroadcastQueue:     at com.android.server.am.BroadcastQueue.processNextBroadcast(BroadcastQueue.java:858)
+BroadcastQueue:     at com.android.server.am.BroadcastQueue$BroadcastHandler.handleMessage(BroadcastQueue.java:171)
+BroadcastQueue:     at android.os.Handler.dispatchMessage(Handler.java:106)
+BroadcastQueue:     at android.os.Looper.loop(Looper.java:164)
+BroadcastQueue:     at android.os.HandlerThread.run(HandlerThread.java:65)
+BroadcastQueue:     at com.android.server.ServiceThread.run(ServiceThread.java:46)</code></pre><h2 id="2-Crash的过程"><a href="#2-Crash的过程" class="headerlink" title="2.Crash的过程"></a>2.Crash的过程</h2><p>出现两种情况</p>
+<ul>
+<li>1.data parcel size大于2m 200×1024</li>
+<li>2.异常 主要两种 deadobjectexception 调用的进程死掉了<br>另外为其他异常</li>
 </ul>
-<h3 id="TAGS-LIST"><a href="#TAGS-LIST" class="headerlink" title="TAGS LIST"></a>TAGS LIST</h3>
+<pre><code>@frameworks/base/core/jni/android_util_Binder.cpp
+void signalExceptionForError(JNIEnv* env, jobject obj, status_t err,
+        bool canThrowRemoteException, int parcelSize)
+case FAILED_TRANSACTION: {
+    ALOGE(&quot;!!! FAILED BINDER TRANSACTION !!!  (parcel size = %d)&quot;, parcelSize);
+    if (canThrowRemoteException &amp;&amp; parcelSize &gt; 200*1024) {
+        // bona fide large payload
+        exceptionToThrow = &quot;android/os/TransactionTooLargeException&quot;;
+        snprintf(msg, sizeof(msg)-1, &quot;data parcel size %d bytes&quot;, parcelSize);
+    } else {
+        // Heuristic: a payload smaller than this threshold &quot;shouldn&#39;t&quot; be too
+        // big, so it&#39;s probably some other, more subtle problem.  In practice
+        // it seems to always mean that the remote process died while the binder
+        // transaction was already in flight.
+        exceptionToThrow = (canThrowRemoteException)
+                ? &quot;android/os/DeadObjectException&quot;
+                : &quot;java/lang/RuntimeException&quot;;
+        snprintf(msg, sizeof(msg)-1,
+                &quot;Transaction failed on small parcel; remote process probably died&quot;);
+    }
+    jniThrowException(env, exceptionToThrow, msg);
+} break;</code></pre><p>//performReceiveLocked报错并且crash app</p>
+<pre><code>@BroadcastQueue.java
+482    void performReceiveLocked(ProcessRecord app, IIntentReceiver receiver,
+483            Intent intent, int resultCode, String data, Bundle extras,
+484            boolean ordered, boolean sticky, int sendingUser) throws RemoteException {
+485        // Send the intent to the receiver asynchronously using one-way binder calls.
+486        if (app != null) {
+487            if (app.thread != null) {
+488                // If we have an app thread, do the call through that so it is
+489                // correctly ordered with other one-way calls.
+490                try {
+491                    app.thread.scheduleRegisteredReceiver(receiver, intent, resultCode,
+492                            data, extras, ordered, sticky, sendingUser, app.repProcState);
+493                // TODO: Uncomment this when (b/28322359) is fixed and we aren&#39;t getting
+494                // DeadObjectException when the process isn&#39;t actually dead.
+495                //} catch (DeadObjectException ex) {
+496                // Failed to call into the process.  It&#39;s dying so just let it die and move on.
+497                //    throw ex;
+498                } catch (RemoteException ex) {
+499                    // Failed to call into the process. It&#39;s either dying or wedged. Kill it gently.
+500                    synchronized (mService) {
+501                        Slog.w(TAG, &quot;Can&#39;t deliver broadcast to &quot; + app.processName
+502                                + &quot; (pid &quot; + app.pid + &quot;). Crashing it.&quot;);  //here
+503                        app.scheduleCrash(&quot;can&#39;t deliver broadcast&quot;);  //crash app
+504                    }
+505                    throw ex;
+506                }
+507            } else {
+508                // Application has died. Receiver doesn&#39;t exist.
+509                throw new RemoteException(&quot;app.thread must not be null&quot;);
+510            }
+511        } else {
+512            receiver.performReceive(intent, resultCode, data, extras, ordered,
+513                    sticky, sendingUser);
+514        }
+515    }</code></pre><pre><code>@frameworks/base/services/core/java/com/android/server/am/ProcessRecord.java
+void scheduleCrash(String message) {
+    // Checking killedbyAm should keep it from showing the crash dialog if the process
+    // was already dead for a good / normal reason.
+    if (!killedByAm) {
+        if (thread != null) {
+            if (pid == Process.myPid()) {
+                Slog.w(TAG, &quot;scheduleCrash: trying to crash system process!&quot;);
+                return;
+            }
+            long ident = Binder.clearCallingIdentity();
+            try {
+                thread.scheduleCrash(message); //throw RemoteServiceException然后kill
+            } catch (RemoteException e) {
+                // If it&#39;s already dead our work is done. If it&#39;s wedged just kill it.
+                // We won&#39;t get the crash dialog or the error reporting.
+                kill(&quot;scheduleCrash for &#39;&quot; + message + &quot;&#39; failed&quot;, true);
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+}</code></pre><pre><code>void kill(String reason, boolean noisy) {
+    if (!killedByAm) {
+        Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, &quot;kill&quot;);
+        if (noisy) {
+            Slog.i(TAG, &quot;Killing &quot; + toShortString() + &quot; (adj &quot; + setAdj + &quot;): &quot; + reason);
+        }
+        EventLog.writeEvent(EventLogTags.AM_KILL, userId, pid, processName, setAdj, reason);
+        Process.killProcessQuiet(pid);
+        ActivityManagerService.killProcessGroup(uid, pid);
+        if (!persistent) {
+            killed = true;
+            killedByAm = true;
+        }
+        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+    }
+}</code></pre><p>@frameworks/base/core/java/android/app/ActivityThread.java</p>
+<pre><code>public void scheduleCrash(String msg) {
+    sendMessage(H.SCHEDULE_CRASH, msg);
+}
+1767                case SCHEDULE_CRASH:
+1768                    throw new RemoteServiceException((String)msg.obj);</code></pre><h2 id="3-Binder错误信息kernel-log"><a href="#3-Binder错误信息kernel-log" class="headerlink" title="3.Binder错误信息kernel log"></a>3.Binder错误信息kernel log</h2><pre><code>@binder.c
+4067err_alloc_t_failed:
+4068err_bad_call_stack:
+4069err_empty_call_stack:
+4070err_dead_binder:
+4071err_invalid_target_handle:
+...
+4081    binder_debug(BINDER_DEBUG_FAILED_TRANSACTION,
+4082         &quot;%d:%d transaction failed %d/%d, size %lld-%lld line %d\n&quot;,
+4083         proc-&gt;pid, thread-&gt;pid, return_error, return_error_param,
+4084         (u64)tr-&gt;data_size, (u64)tr-&gt;offsets_size,
+4085         return_error_line);</code></pre><pre><code>11-25 09:31:23.786059  1052  1052 I [128416.232769](6)[1052:ActivityManager]binder: 1025:1052 transaction failed 29201/-28, size 792-8 line 3781</code></pre><p>那么问题来了，这个过程也是使用binder.<br>同样是systemserver向应用发送，为什么之前不成功，现在可以了,因为当时空间不够，后面可能够了</p>
+<pre><code>return_error --&gt; 29201 --&gt; BR_FAILED_REPLY 
+return_error_param  --&gt; 28 --&gt; ENOSPC    /* No space left on device */
+31#define    ENOSPC    28    /* No space left on device */</code></pre><p>还有些错是parcel太大导致，这里是没有空间，可能注册广播太多，注销慢，或者逻辑错误，也可能是进程死了<br>还可以可能比如systemserver的线程都在做数据库之类的blocked</p>
+<h2 id="4-其他例子"><a href="#4-其他例子" class="headerlink" title="4.其他例子"></a>4.其他例子</h2><p><a href="https://ask.csdn.net/questions/682317" target="_blank" rel="noopener">https://ask.csdn.net/questions/682317</a></p>
+<pre><code>java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 3625220 bytes
+at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3982)
+at android.os.Handler.handleCallback(Handler.java:761)
+at android.os.Handler.dispatchMessage(Handler.java:98)
+at android.os.Looper.loop(Looper.java:156)
+at android.app.ActivityThread.main(ActivityThread.java:6523)
+at java.lang.reflect.Method.invoke(Native Method)
+at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:942)
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:832)
+Caused by: android.os.TransactionTooLargeException: data parcel size 3625220 bytes
+at android.os.BinderProxy.transactNative(Native Method)
+at android.os.BinderProxy.transact(Binder.java:617)
+at android.app.ActivityManagerProxy.activityStopped(ActivityManagerNative.java:3632)
+at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3974)</code></pre>
             </div>
             <hr/>
 
@@ -593,8 +748,8 @@
                 </a>
             </div>
             <br/>
-            <a  href="/tags/index.html">
-                    《binder》
+            <a  href="/2019/09/21/FAILED BINDER TRANSACTION/">
+                    《FAILED BINDER TRANSACTION》
             </a> 由
             <a href="http://dongwang0623.com">
                 蓝色天空
@@ -640,23 +795,22 @@
                 <i class="fas fa-chevron-left"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2019/09/21/FAILED BINDER TRANSACTION/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="binder">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
                         
-                        <span class="card-title">binder</span>
+                        <span class="card-title">FAILED BINDER TRANSACTION</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Binder
-FAILED BINDER TRANSACTION
-Binder调用结构流程图.md
+                            1.异常Log Pattern
 
-TAGS LIST
+BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
+ActivityManager: Kil
                         
                     </div>
                     <div class="publish-info">
@@ -673,32 +827,48 @@ TAGS LIST
                 </div>
 
                 
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Binder/">
+                        <span class="chip bg-color">Binder</span>
+                    </a>
+                    
+                    <a href="/tags/Android-Stability/">
+                        <span class="chip bg-color">Android Stability</span>
+                    </a>
+                    
+                </div>
+                
             </div>
         </div>
         
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fas fa-chevron-right"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2019/09/21/AIDL 使用/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="binder">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="AIDL 使用">
                         
-                        <span class="card-title">binder</span>
+                        <span class="card-title">AIDL 使用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Binder
-FAILED BINDER TRANSACTION
-Binder调用结构流程图.md
+                            [toc]
 
-TAGS LIST
+
+[toc]
+1.服务端
+
+//add aidl
+interface IOperationManager {
+   void operation(in Parameter parameter1 , in Parameter p
                         
                     </div>
                     <div class="publish-info">
@@ -707,13 +877,24 @@ TAGS LIST
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            蓝色天空
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/list/" class="post-category">
+                                    list
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Binder/">
+                        <span class="chip bg-color">Binder</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
