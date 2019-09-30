@@ -4,11 +4,13 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Binder通信介绍和示例(c client端和 c service端  java client端和c service端), 蓝色天空">
-    <meta name="description" content="1.Java端 binder client端
-ServiceManager.getService获取binder，然后调用binder.transact来通信
-@MainActivity
-    public static final St">
+    <meta name="keywords" content="AIDL 使用, 蓝色天空">
+    <meta name="description" content="1.服务端
+
+//add aidl
+interface IOperationManager {
+   void operation(in Parameter parameter1 , in Parameter parameter2);
+  ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +18,7 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Binder通信介绍和示例(c client端和 c service端  java client端和c service端) | 蓝色天空</title>
+    <title>AIDL 使用 | 蓝色天空</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -212,7 +214,7 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/wd623894174/" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -268,7 +270,7 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/wd623894174/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -293,7 +295,7 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Binder通信介绍和示例(c client端和 c service端  java client端和c service端)
+                        AIDL 使用
                     </div>
                 </div>
             </div>
@@ -414,6 +416,15 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Android-Binder/" class="post-category">
+                                Android Binder
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
@@ -423,6 +434,20 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
                     2019-09-21
                 </div>
 
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        395
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        2 分
+                    </div>
+                    
                 
 				
 				
@@ -436,270 +461,117 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="1-Java端-binder-client端"><a href="#1-Java端-binder-client端" class="headerlink" title="1.Java端 binder client端"></a>1.Java端 binder client端</h3><a id="more"></a>
-<p>ServiceManager.getService获取binder，然后调用binder.transact来通信</p>
-<pre><code>@MainActivity
-    public static final String SERVICE_NAME = &quot;binder.cservice&quot;;
-    //建议使用FIRST_CALL_TRANSACTION来表示感觉比较规范，只要和binder对端一致就可以
-    public static final int NOTIFY_MESSAGE = IBinder.FIRST_CALL_TRANSACTION;
-    public static final int DELETE_FILE = IBinder.FIRST_CALL_TRANSACTION + 1;
-    public static final int ADD_FILE = IBinder.FIRST_CALL_TRANSACTION + 2;
-    public static final int RELEASE_FILE = IBinder.FIRST_CALL_TRANSACTION + 3;
+                <h2 id="1-服务端"><a href="#1-服务端" class="headerlink" title="1.服务端"></a>1.服务端</h2><a id="more"></a>
 
-    private void initView() {
-        Button btn = findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG,&quot;initView onClick: &quot;);
-                notityCService();
-            }
-        });
-    }
+<p>//add aidl</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">IOperationManager</span> <span class="token punctuation">{</span>
+   <span class="token keyword">void</span> <span class="token function">operation</span><span class="token punctuation">(</span>in Parameter parameter1 <span class="token punctuation">,</span> in Parameter parameter2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">void</span> <span class="token function">registerListener</span><span class="token punctuation">(</span>in IOnOperationCompletedListener listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">void</span> <span class="token function">unregisterListener</span><span class="token punctuation">(</span>in IOnOperationCompletedListener listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//计算完成结果，给客户端</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">IOnOperationCompletedListener</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">onOperationCompleted</span><span class="token punctuation">(</span>in Parameter result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//实现stub</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> IOperationManager<span class="token punctuation">.</span>Stub stub <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IOperationManager<span class="token punctuation">.</span>Stub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">operation</span><span class="token punctuation">(</span>Parameter parameter1<span class="token punctuation">,</span> Parameter parameter2<span class="token punctuation">)</span> <span class="token keyword">throws</span> RemoteException <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            Log<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"operation 被调用，延时5秒，模拟耗时计算"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">int</span> param1 <span class="token operator">=</span> parameter1<span class="token punctuation">.</span><span class="token function">getParam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> param2 <span class="token operator">=</span> parameter2<span class="token punctuation">.</span><span class="token function">getParam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Parameter result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Parameter</span><span class="token punctuation">(</span>param1 <span class="token operator">*</span> param2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//在操作 RemoteCallbackList 前，必须先调用其 beginBroadcast 方法</span>
+        <span class="token comment" spellcheck="true">//此外，beginBroadcast 必须和 finishBroadcast配套使用</span>
+        <span class="token keyword">int</span> count <span class="token operator">=</span> callbackList<span class="token punctuation">.</span><span class="token function">beginBroadcast</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            IOnOperationCompletedListener listener <span class="token operator">=</span> callbackList<span class="token punctuation">.</span><span class="token function">getBroadcastItem</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>listener <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                listener<span class="token punctuation">.</span><span class="token function">onOperationCompleted</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//提供数据result给客户端</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        callbackList<span class="token punctuation">.</span><span class="token function">finishBroadcast</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Log<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"计算结束"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    private void notityCService() {
-        IBinder binder = null ;
-        binder = ServiceManager.getService(SERVICE_NAME);
-        if(binder == null) {
-            Log.e(TAG,&quot;notityCService binder is null: &quot;);
-            return;
-        }
-        Parcel data = Parcel.obtain();
-        data.writeString(&quot;Hello world&quot;);
-        Parcel reply = Parcel.obtain();
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerListener</span><span class="token punctuation">(</span>IOnOperationCompletedListener listener<span class="token punctuation">)</span> <span class="token keyword">throws</span> RemoteException <span class="token punctuation">{</span>
+        callbackList<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Log<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"registerListener 注册回调成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//客户端调用功能直接注册</span>
+    <span class="token punctuation">}</span>
 
-        int replyResult = -1;
-        try {
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">unregisterListener</span><span class="token punctuation">(</span>IOnOperationCompletedListener listener<span class="token punctuation">)</span> <span class="token keyword">throws</span> RemoteException <span class="token punctuation">{</span>
+        callbackList<span class="token punctuation">.</span><span class="token function">unregister</span><span class="token punctuation">(</span>listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Log<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"unregisterListener 解除注册回调成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-            binder.transact(DELETE_FILE, data, reply,0);
-            replyResult = reply.readInt();
-            Log.d(TAG, &quot;result1: &quot; + replyResult);
-            replyResult = reply.readInt();
-            Log.d(TAG, &quot;result2: &quot; + replyResult);
-        } catch (RemoteException e) {
-            Log.e(TAG,&quot;RemoteException: &quot; + e);
-        }
-        data.recycle();
-        reply.recycle();
-    }</code></pre><h3 id="2-C-binder-service端"><a href="#2-C-binder-service端" class="headerlink" title="2.C binder service端"></a>2.C binder service端</h3><p>binder server端通过onTransact，来获取binder端来的data,并且把回复写到reply里</p>
-<pre><code>@MyPrint.cpp
+<span class="token keyword">public</span> IBinder <span class="token function">onBind</span><span class="token punctuation">(</span>Intent intent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> stub<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="2-客户端"><a href="#2-客户端" class="headerlink" title="2.客户端"></a>2.客户端</h2><p>//binder到服务端</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">bindService</span><span class="token punctuation">(</span>intent<span class="token punctuation">,</span> serviceConnection<span class="token punctuation">,</span> Context<span class="token punctuation">.</span>BIND_AUTO_CREATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-#include &quot;MyPrint.h&quot;
-#include &lt;log/log.h&gt; 
-#include &lt;binder/Parcel.h&gt;
-#include &lt;utils/Log.h&gt;
+<span class="token keyword">private</span> ServiceConnection serviceConnection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServiceConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onServiceConnected</span><span class="token punctuation">(</span>ComponentName name<span class="token punctuation">,</span> IBinder service<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        iOperationManager <span class="token operator">=</span> IOperationManager<span class="token punctuation">.</span>Stub<span class="token punctuation">.</span><span class="token function">asInterface</span><span class="token punctuation">(</span>service<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//获取iOperationManager</span>
+    <span class="token punctuation">}</span>
 
-#define SERVICE_NAME &quot;binder.cservice&quot;
-#define LOG_TAG &quot;MyPrint&quot;
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onServiceDisconnected</span><span class="token punctuation">(</span>ComponentName name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        iOperationManager <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>//通过iOperationManager调用aidl方法来访问server端</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">case</span> R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>btn_unregisterListener<span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>iOperationManager <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            iOperationManager<span class="token punctuation">.</span><span class="token function">unregisterListener</span><span class="token punctuation">(</span>completedListener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">RemoteException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">case</span> R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>btn_operation<span class="token operator">:</span> <span class="token punctuation">{</span>
 
-namespace android {
-MyPrint::MyPrint() {
-}
-
-MyPrint::~MyPrint() {
-}
-
-int MyPrint::instantiate(){
-    int ret = defaultServiceManager()-&gt;addService(String16(SERVICE_NAME), new MyPrint());
-    return ret;
-}
-
-status_t MyPrint::onTransact(uint32_t code, const Parcel&amp; data, Parcel* reply, uint32_t flags) {
-    switch (code) {
-    case NOTIFY_MESSAGE: {
-        char const* message = data.readCString();
-        ALOGI(&quot;onTransact NOTIFY_MESSAGE message = %s&quot;, message);
-        reply-&gt;writeInt32(5);
-        ALOGI(&quot;onTransact NOTIFY_MESSAGE reply 5&quot;);
-        break;
-    }
-    case DELETE_FILE: {
-        String16 message = data.readString16();
-        ALOGI(&quot;onTransact DELETE_FILE message = %s&quot;, String8(message).string().c_str()));
-        reply-&gt;writeInt32(6);
-        reply-&gt;writeInt32(7);
-        ALOGI(&quot;onTransact DELETE_FILE reply 6 7&quot;);
-        break;
-    }
-
-    default:
-        ALOGI(&quot;Unsupported command code: (%d)&quot;, code);
-        return BBinder::onTransact(code, data, reply, flags);
-    }
-    return 0;
-}
-
-}//namespace
-</code></pre><pre><code>#MyPrint.h
-#ifndef _MYPRINT_HEADER_
-#define _MYPRINT_HEADER_
-
-#include &lt;binder/IInterface.h&gt;
-#include &lt;binder/Parcel.h&gt;
-#include &lt;binder/IServiceManager.h&gt;
-#include &lt;utils/threads.h&gt;
-#include &lt;stdio.h&gt;
-
-namespace android{
-    class MyPrint: public BBinder{   //BBinder
-    public:
-
-        enum {
-            NOTIFY_MESSAGE      = IBinder::FIRST_CALL_TRANSACTION,   //注意这里是, 和 ::
-            DELETE_FILE         = IBinder::FIRST_CALL_TRANSACTION + 1,
-            ADD_FILE            = IBinder::FIRST_CALL_TRANSACTION + 2,
-            RELEASE_FILE        = IBinder::FIRST_CALL_TRANSACTION + 3,
-        };
-
-        static int instantiate();
-        MyPrint();
-        virtual ~MyPrint();
-        virtual status_t onTransact(uint32_t, const Parcel&amp;, Parcel*, uint32_t);
-    };
-}//namespace
-
-#endif</code></pre><p>rc唤醒  /system/bin/binderCService时，执行main.cpp，然后addservice并且执行MyPrint::MyPrint()来初始化</p>
-<pre><code>@main.cpp
-#include &lt;binder/IServiceManager.h&gt;
-#include &lt;binder/IPCThreadState.h&gt;
-#include &lt;binder/ProcessState.h&gt;
-#include &lt;cutils/log.h&gt;
-#include &quot;MyPrint.h&quot;
-#include &lt;utils/Log.h&gt;
-
-using namespace android;
-
-int main(int argc, char *argv[]) {
-    ALOGI(&quot;MyPrint cservice is starting up...&quot;);
-    sp&lt;ProcessState&gt; proc(ProcessState::self());
-    sp&lt;IServiceManager&gt; sm = defaultServiceManager();
-    MyPrint::instantiate();   //add service 并且初始化MyPrint
-    ProcessState::self()-&gt;startThreadPool(); 
-    IPCThreadState::self()-&gt;joinThreadPool();
-    ALOGI(&quot;MyPrint cservice exits thread loop&quot;);
-    return 0;
-}</code></pre><p>@Android.mk</p>
-<pre><code>LOCAL_PATH:= $(call my-dir)
-
-include $(CLEAR_VARS)
-LOCAL_C_INCLUDES := $(LOCAL_PATH)  \
-                    $(TARGET_OUT_HEADERS)/common/inc
-
-LOCAL_SHARED_LIBRARIES := \
-        libc \
-        libcutils \
-        libutils \
-        liblog \
-        libdl \
-        libbinder
-
-LOCAL_MODULE := binderCService
-LOCAL_SRC_FILES := main.cpp MyPrint.cpp 
-LOCAL_MODULE_TAGS := optional
-#LOCAL_CFLAGS := $(QSEECOM_CFLAGS)
-LOCAL_INIT_RC := binderCService.rc
-include $(BUILD_EXECUTABLE)
-
-include $(call all-makefiles-under,$(LOCAL_PATH))</code></pre><p>//默认是会有selinux问题，不会启动成功，需要手动 binderCService &amp;来启动</p>
-<pre><code>@binderCService.rc
-service binderCService /system/bin/binderCService
-    class late_start
-    user root
-    group root</code></pre><p>//手动启动后，执行如下命令，可以看到服务起来，并且打印main.cpp中的log</p>
-<pre><code>msm8996_gvmq:/ # service list| grep bind
-0    binder.cservice: []</code></pre><h3 id="3-c-client端-binder到service端"><a href="#3-c-client端-binder到service端" class="headerlink" title="3.c client端 binder到service端"></a>3.c client端 binder到service端</h3><p>c client端通过ibinder-&gt;transact，写2019到binder server端</p>
-<pre><code>@binder_test.cpp
-#include &lt;binder/IServiceManager.h&gt;
-#include &lt;binder/IBinder.h&gt;
-#include &lt;binder/Parcel.h&gt;
-#include &lt;binder/ProcessState.h&gt;
-#include &lt;binder/IPCThreadState.h&gt;
-#include &lt;cutils/log.h&gt;
-#include &lt;utils/Log.h&gt;
-
-using namespace android;
-
-#define SERVICE_NAME &quot;binder.cservice&quot;
-
-int main() {
-    sp&lt;IServiceManager&gt; sm = defaultServiceManager();
-    sp&lt;IBinder&gt; ibinder = sm-&gt;getService(String16(SERVICE_NAME));
-    if (ibinder == NULL) {
-        ALOGI(&quot;binder_test binder is null&quot; );
-        return -1;
-    }
-    Parcel data, reply;
-    int cmd = IBinder::FIRST_CALL_TRANSACTION;
-    int ret;
-
-    ALOGI(&quot;binder_test transact  FIRST_CALL_TRANSACTION&quot; );
-    data.writeInt32(2019);
-    ret = ibinder-&gt;transact(cmd, data, &amp;reply, 0);
-
-    ALOGI(&quot;binder_test transact : %d&quot; ,reply.readInt32());
-    data.freeData();
-    return 0;
-}</code></pre><p>//c的客户端也是system/bin/binder_test，通过binder_test来启动</p>
-<pre><code>LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
-
-LOCAL_SHARED_LIBRARIES := \
-        libc \
-        libcutils \
-        libutils \
-        liblog \
-        libdl \
-        libbinder
-
-LOCAL_MODULE := binder_test
-LOCAL_SRC_FILES := binder_test.cpp
-LOCAL_MODULE_TAGS := optional
-
-include $(BUILD_EXECUTABLE)</code></pre><p>binder server端，修改了下，必须读client的data才能走下去，这里用data.readInt32()</p>
-<pre><code>@MyPrint.cpp
-    case NOTIFY_MESSAGE: {
-        ALOGI(&quot;onTransact NOTIFY_MESSAGE message&quot;);
-        int message = data.readInt32();
-        reply-&gt;writeInt32(5);
-        ALOGI(&quot;onTransact NOTIFY_MESSAGE reply 5&quot;);
-        break;
-    }</code></pre><p>调试时限制性 binderCService &amp; 启动service，然后binder_test在启动client端就可以了<br>结果如下：</p>
-<pre><code>I         : MyPrint cservice is starting up...
-I         : binder_test transact  FIRST_CALL_TRANSACTION
-I MyPrint : onTransact NOTIFY_MESSAGE message
-I MyPrint : onTransact NOTIFY_MESSAGE reply 5
-I         : binder_test transact : 5</code></pre><h3 id="4-parcel介绍和使用"><a href="#4-parcel介绍和使用" class="headerlink" title="4.parcel介绍和使用"></a>4.parcel介绍和使用</h3><pre><code>//String16 String8 Const char*关系
-String16 name16 = String16(&quot;HellOThEWrolD&quot;);  //定义初始化String16
-String8 name8 = String8(name16);   //String16转为String8
-const char *C_name8 = name8.string();  //String8转为const char *
-
-const char*到char*的转换：
-char *buf = new char[strlen(C_name8)+1];
-strcpy(buf, C_name8);</code></pre><p>java端Parcel类使用如下</p>
-<pre><code>Parcel data = Parcel.obtain();   //获取Parcel
-data.writeString(&quot;Hello world&quot;);   //writeString写入数据
-Parcel reply = Parcel.obtain();
-binder.transact(DELETE_FILE, data, reply,0);   //binder transact
-data.recycle();    //释放parcel
-reply.recycle();</code></pre><p>C Server端</p>
-<pre><code>status_t MyPrint::onTransact(uint32_t code, const Parcel&amp; data, Parcel* reply, uint32_t flags) {
-    switch (code) {
-    case DELETE_FILE: {
-        String16 message = data.readString16();   //readString16
-        ALOGI(&quot;onTransact DELETE_FILE message = %s&quot;, String8(message).string());   //先转为Sring8,在使用.string()转为Const char*才可以打印
-        reply-&gt;writeInt32(6);       //写Int
-        reply-&gt;writeInt32(7);
-        ALOGI(&quot;onTransact DELETE_FILE reply 6 7&quot;);
-        break;
-    }
-    ...
-}</code></pre><p>C Client端</p>
-<pre><code>Parcel data, reply;   //初始化
-int cmd = IBinder::FIRST_CALL_TRANSACTION;
-String8 src1(&quot;HelloDayi &quot;);
-data.writeString8(src1);    //write
-ret = ibinder-&gt;transact(cmd, data, &amp;reply, 0);
-data.freeData();  //释放</code></pre><h3 id="5-service端-selinux"><a href="#5-service端-selinux" class="headerlink" title="5.service端 selinux"></a>5.service端 selinux</h3><p>测试使用adb shell setenforce 0关闭selinux检测，然后binderCService &amp;来启动service</p>
+    <span class="token keyword">final</span> <span class="token keyword">int</span> param1 <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>et_param1<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token keyword">int</span> param2 <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>et_param2<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Parameter parameter1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Parameter</span><span class="token punctuation">(</span>param1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Parameter parameter2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Parameter</span><span class="token punctuation">(</span>param2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>iOperationManager <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                    iOperationManager<span class="token punctuation">.</span><span class="token function">operation</span><span class="token punctuation">(</span>parameter1<span class="token punctuation">,</span> parameter2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">RemoteException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//实现 completedListener来处理返回结果</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> IOnOperationCompletedListener completedListener <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IOnOperationCompletedListener<span class="token punctuation">.</span>Stub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onOperationCompleted</span><span class="token punctuation">(</span><span class="token keyword">final</span> Parameter result<span class="token punctuation">)</span> <span class="token keyword">throws</span> RemoteException <span class="token punctuation">{</span>
+        <span class="token function">runOnUiThread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                et_result<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span><span class="token string">"运算结果： "</span> <span class="token operator">+</span> result<span class="token punctuation">.</span><span class="token function">getParam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
 
             </div>
             <hr/>
@@ -815,7 +687,7 @@ data.freeData();  //释放</code></pre><h3 id="5-service端-selinux"><a href="#5
                         <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
                     </div>
                     <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                        <img src="/medias/reward/wechat.jpg" class="reward-img" alt="微信打赏二维码">
                     </div>
                 </div>
             </div>
@@ -860,11 +732,11 @@ data.freeData();  //释放</code></pre><h3 id="5-service端-selinux"><a href="#5
                 </a>
             </div>
             <br/>
-            <a  href="/2019/09/21/Binder通信介绍和示例(c client端和 c service端  java client端和c service端)/">
-                    《Binder通信介绍和示例(c client端和 c service端  java client端和c service端)》
+            <a  href="/2019/09/21/lunbo/aidl-shi-yong/">
+                    《AIDL 使用》
             </a> 由
-            <a href="http://dongwang0623.com">
-                蓝色天空
+            <a href="http://dongwang0623.cn">
+                wangdong
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                 知识共享署名 4.0 国际许可协议
@@ -906,27 +778,22 @@ data.freeData();  //释放</code></pre><h3 id="5-service端-selinux"><a href="#5
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/09/21/AIDL 使用/">
+                <a href="/2019/09/21/failed-binder-transaction/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="AIDL 使用">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
                         
-                        <span class="card-title">AIDL 使用</span>
+                        <span class="card-title">FAILED BINDER TRANSACTION</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            [toc]
+                            1.异常Log Pattern
 
-
-[toc]
-1.服务端
-
-//add aidl
-interface IOperationManager {
-   void operation(in Parameter parameter1 , in Parameter p
+BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
+ActivityManager: Kil
                         
                     </div>
                     <div class="publish-info">
@@ -937,8 +804,8 @@ interface IOperationManager {
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/list/" class="post-category">
-                                    list
+                            <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
                                 </a>
                             
                             
@@ -963,25 +830,22 @@ interface IOperationManager {
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/09/21/Binder通信介绍和示例(java client端和java service端)/">
+                <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-c-client-duan-he-c-service-duan-java-client-duan-he-c-service-duan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Binder通信介绍和示例(java client端和java service端)">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Binder通信介绍和示例(c client端和 c service端  java client端和c service端)">
                         
-                        <span class="card-title">Binder通信介绍和示例(java client端和java service端)</span>
+                        <span class="card-title">Binder通信介绍和示例(c client端和 c service端  java client端和c service端)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            一、 AIDL binderService来实现1.aidl server端
-
-创建aidl文件，写接口方法
-// IDeleteFIle.aidl
-package com.example.binderserver;
-
-// Declare
+                            1.Java端 binder client端
+ServiceManager.getService获取binder，然后调用binder.transact来通信
+@MainActivity
+    public static final St
                         
                     </div>
                     <div class="publish-info">
@@ -990,8 +854,12 @@ package com.example.binderserver;
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            蓝色天空
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -1120,10 +988,13 @@ package com.example.binderserver;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">年份</span>
-            <a href="http://dongwang0623.com" target="_blank">蓝色天空</a>
+            <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">8.3k</span>&nbsp;字
             
             
             
@@ -1142,6 +1013,8 @@ package com.example.binderserver;
             </span>
             
             <br>
+            
+     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -1188,25 +1061,38 @@ package com.example.binderserver;
             </script>
             <br>
             
+      -->
+            
+            
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
     </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
+        <i class="fab fa-csdn">CSDN</i>
+    </a>
+
+
 
 </div>
     </div>

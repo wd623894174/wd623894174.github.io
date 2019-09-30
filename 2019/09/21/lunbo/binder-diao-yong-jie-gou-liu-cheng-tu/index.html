@@ -4,16 +4,11 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="AIDL 使用, 蓝色天空">
-    <meta name="description" content="[toc]
+    <meta name="keywords" content="Binder调用结构流程图, 蓝色天空">
+    <meta name="description" content="参考link:
 
-
-[toc]
-1.服务端
-
-//add aidl
-interface IOperationManager {
-   void operation(in Parameter parameter1 , in Parameter p">
+http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解Android Binder通信架构
+http://gityuan.com/2018/02/17/mo">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +16,7 @@ interface IOperationManager {
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>AIDL 使用 | 蓝色天空</title>
+    <title>Binder调用结构流程图 | 蓝色天空</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -217,7 +212,7 @@ interface IOperationManager {
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/wd623894174/" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -273,7 +268,7 @@ interface IOperationManager {
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/wd623894174/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -292,13 +287,13 @@ interface IOperationManager {
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/binderIoctl.jpeg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        AIDL 使用
+                        Binder调用结构流程图
                     </div>
                 </div>
             </div>
@@ -422,8 +417,8 @@ interface IOperationManager {
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/list/" class="post-category">
-                                list
+                            <a href="/categories/Android-Binder/" class="post-category">
+                                Android Binder
                             </a>
                         
                     </div>
@@ -438,6 +433,20 @@ interface IOperationManager {
                 </div>
 
                 
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        870
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        4 分
+                    </div>
+                    
+                
 				
 				
                     <div id="busuanzi_container_page_pv" class="info-break-policy">
@@ -450,116 +459,73 @@ interface IOperationManager {
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>[toc]</p>
-<!-- toc -->
+                <p>参考link:</p>
+<ul>
+<li><a href="http://gityuan.com/2016/09/04/binder-start-service/" target="_blank" rel="noopener">http://gityuan.com/2016/09/04/binder-start-service/</a>   //彻底理解Android Binder通信架构</li>
+<li><a href="http://gityuan.com/2018/02/17/monkey-deadlock/" target="_blank" rel="noopener">http://gityuan.com/2018/02/17/monkey-deadlock/</a>    //跑monkey压力测试过程的冻屏案例</li>
+</ul>
+<a id="more"></a>
 
-<p>[toc]</p>
-<h2 id="1-服务端"><a href="#1-服务端" class="headerlink" title="1.服务端"></a>1.服务端</h2><a id="more"></a>
+<h3 id="1-binder调用流程图"><a href="#1-binder调用流程图" class="headerlink" title="1.binder调用流程图"></a>1.binder调用流程图</h3><p><img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/binderIoctl.jpeg" alt></p>
+<ul>
+<li>1.发起端线程向Binder Driver发起binder ioctl请求后, 便采用环不断talkWithDriver,此时该线程处于阻塞状态, 直到收到如下BR_XXX命令才会结束该过程.<br>BR_TRANSACTION_COMPLETE: oneway模式下,收到该命令则退出<br>BR_REPLY: 非oneway模式下,收到该命令才退出;<br>BR_DEAD_REPLY: 目标进程/线程/binder实体为空, 以及释放正在等待reply的binder thread或者binder buffer;<br>BR_FAILED_REPLY: 情况较多,比如非法handle, 错误事务栈, security, 内存不足, buffer不足, 数据拷贝失败, 节点创建失败, 各种不匹配等问题<br>BR_ACQUIRE_RESULT: 目前未使用的协议;</li>
+<li>2.左图中waitForResponse收到BR_TRANSACTION_COMPLETE,则直接退出循环, 则没有机会执行executeCommand()方法, 故将其颜色画为灰色. 除以上5种BR_XXX命令, 当收到其他BR命令,则都会执行executeCommand过程.</li>
+<li>3.目标Binder线程创建后, 便进入joinThreadPool()方法, 采用循环不断地循环执行getAndExecuteCommand()方法, 当bwr的读写buffer都没有数据时,则阻塞在binder_thread_read的wait_event过程. 另外,正常情况下binder线程一旦创建则不会退出.</li>
+</ul>
+<h3 id="2-binder通信协议图"><a href="#2-binder通信协议图" class="headerlink" title="2.binder通信协议图"></a>2.binder通信协议图</h3><p><img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/transaction.jpeg" alt></p>
+<ul>
+<li>Binder客户端或者服务端向Binder Driver发送的命令都是以BC_开头,例如本文的BC_TRANSACTION和BC_REPLY, 所有Binder Driver向Binder客户端或者服务端发送的命令则都是以BR_开头, 例如本文中的BR_TRANSACTION和BR_REPLY.</li>
+<li>只有当BC_TRANSACTION或者BC_REPLY时, 才调用binder_transaction()来处理事务. 并且都会回应调用者一个BINDER_WORK_TRANSACTION_COMPLETE事务, 经过binder_thread_read()会转变成BR_TRANSACTION_COMPLETE.</li>
+<li>startService过程便是一个非oneway的过程, 那么oneway的通信过程如下所述.</li>
+</ul>
+<p>上图是非oneway通信过程的协议图, 下图则是对于oneway场景下的通信协议图:</p>
+<p><img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/transaction_no_oneway.jpeg" alt></p>
+<h3 id="3-binder-通信log"><a href="#3-binder-通信log" class="headerlink" title="3.binder 通信log"></a>3.binder 通信log</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//binder client  java log (BinderProxy.transact)  ,native log(IPCThreadState15waitForResponse) ,kernel log (kernel: binder_ioctl_write_read)</span>
+<span class="token string">"Binder:1930_5"</span> prio<span class="token operator">=</span><span class="token number">5</span> tid<span class="token operator">=</span><span class="token number">85</span> Native
+  <span class="token operator">|</span> group<span class="token operator">=</span><span class="token string">"main"</span> sCount<span class="token operator">=</span><span class="token number">1</span> dsCount<span class="token operator">=</span><span class="token number">0</span> obj<span class="token operator">=</span><span class="token number">0x13cb1820</span> self<span class="token operator">=</span><span class="token number">0x7f79fcd400</span>
+  <span class="token operator">|</span> sysTid<span class="token operator">=</span><span class="token number">5316</span> nice<span class="token operator">=</span><span class="token operator">-</span><span class="token number">2</span> cgrp<span class="token operator">=</span><span class="token keyword">default</span> sched<span class="token operator">=</span><span class="token number">0</span><span class="token operator">/</span><span class="token number">0</span> handle<span class="token operator">=</span><span class="token number">0x7f6e1ff450</span>
+  <span class="token operator">|</span> state<span class="token operator">=</span>S schedstat<span class="token operator">=</span><span class="token punctuation">(</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token punctuation">)</span> utm<span class="token operator">=</span><span class="token number">83</span> stm<span class="token operator">=</span><span class="token number">56</span> core<span class="token operator">=</span><span class="token number">2</span> HZ<span class="token operator">=</span><span class="token number">100</span>
+  <span class="token operator">|</span> stack<span class="token operator">=</span><span class="token number">0x7f6e105000-</span><span class="token number">0x7f6e107000</span> stackSize<span class="token operator">=</span>1005KB
+  <span class="token operator">|</span> held mutexes<span class="token operator">=</span>
+  kernel<span class="token operator">:</span> __switch_to<span class="token operator">+</span><span class="token number">0x88</span><span class="token operator">/</span><span class="token number">0x94</span>
+  kernel<span class="token operator">:</span> binder_thread_read<span class="token operator">+</span><span class="token number">0x4e4</span><span class="token operator">/</span><span class="token number">0x1140</span>   <span class="token comment" spellcheck="true">//binder driver log</span>
+  kernel<span class="token operator">:</span> binder_ioctl_write_read<span class="token operator">+</span><span class="token number">0x1e0</span><span class="token operator">/</span><span class="token number">0x31c</span>
+  kernel<span class="token operator">:</span> binder_ioctl<span class="token operator">+</span><span class="token number">0x28c</span><span class="token operator">/</span><span class="token number">0x710</span>
+  kernel<span class="token operator">:</span> do_vfs_ioctl<span class="token operator">+</span><span class="token number">0x48c</span><span class="token operator">/</span><span class="token number">0x564</span>
+  kernel<span class="token operator">:</span> SyS_ioctl<span class="token operator">+</span><span class="token number">0x60</span><span class="token operator">/</span><span class="token number">0x88</span>
+  kernel<span class="token operator">:</span> el0_svc_naked<span class="token operator">+</span><span class="token number">0x24</span><span class="token operator">/</span><span class="token number">0x28</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">00</span> pc 000000000007831c  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libc<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span>__ioctl<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">)</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">01</span> pc <span class="token number">0000000000020020</span>  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libc<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span>ioctl<span class="token operator">+</span><span class="token number">140</span><span class="token punctuation">)</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">02</span> pc 0000000000055b14  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libbinder<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span>_ZN7android14IPCThreadState14talkWithDriverEb<span class="token operator">+</span><span class="token number">256</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true">//binder native log</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">03</span> pc 0000000000056ab8  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libbinder<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span>_ZN7android14IPCThreadState15waitForResponseEPNS_6ParcelEPi<span class="token operator">+</span><span class="token number">708</span><span class="token punctuation">)</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">04</span> pc 000000000004b504  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libbinder<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span>_ZN7android8BpBinder8transactEjRKNS_6ParcelEPS1_j<span class="token operator">+</span><span class="token number">72</span><span class="token punctuation">)</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">05</span> pc 00000000000ff69c  <span class="token operator">/</span>system<span class="token operator">/</span>lib64<span class="token operator">/</span>libandroid_runtime<span class="token punctuation">.</span><span class="token function">so</span> <span class="token punctuation">(</span><span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token punctuation">)</span>
+  <span class="token keyword">native</span><span class="token operator">:</span> #<span class="token number">06</span> pc <span class="token number">0000000001117058</span>  <span class="token operator">/</span>data<span class="token operator">/</span>dalvik<span class="token operator">-</span>cache<span class="token operator">/</span>arm64<span class="token operator">/</span>system<span class="token annotation punctuation">@framework</span><span class="token annotation punctuation">@boot</span><span class="token punctuation">.</span><span class="token function">oat</span> <span class="token punctuation">(</span>Java_android_os_BinderProxy_transactNative__ILandroid_os_Parcel_2Landroid_os_Parcel_2I<span class="token operator">+</span><span class="token number">196</span><span class="token punctuation">)</span>
+  at android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>BinderProxy<span class="token punctuation">.</span><span class="token function">transactNative</span><span class="token punctuation">(</span>Native method<span class="token punctuation">)</span>
+  at android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>BinderProxy<span class="token punctuation">.</span><span class="token function">transact</span><span class="token punctuation">(</span>Binder<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">615</span><span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">//binder java log </span>
+  at android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>IActivityController$Stub$Proxy<span class="token punctuation">.</span><span class="token function">appCrashed</span><span class="token punctuation">(</span>IActivityController<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">222</span><span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>AppErrors<span class="token punctuation">.</span><span class="token function">handleAppCrashInActivityController</span><span class="token punctuation">(</span>AppErrors<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">450</span><span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>AppErrors<span class="token punctuation">.</span><span class="token function">crashApplicationInner</span><span class="token punctuation">(</span>AppErrors<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">334</span><span class="token punctuation">)</span>
+  <span class="token operator">-</span> locked <span class="token operator">&lt;</span><span class="token number">0x098877e9</span><span class="token operator">></span> <span class="token punctuation">(</span>a com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>ActivityManagerService<span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>AppErrors<span class="token punctuation">.</span><span class="token function">crashApplication</span><span class="token punctuation">(</span>AppErrors<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">309</span><span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>ActivityManagerService<span class="token punctuation">.</span><span class="token function">handleApplicationCrashInner</span><span class="token punctuation">(</span>ActivityManagerService<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">13799</span><span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>ActivityManagerService<span class="token punctuation">.</span><span class="token function">handleApplicationCrash</span><span class="token punctuation">(</span>ActivityManagerService<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">13781</span><span class="token punctuation">)</span>
+  at android<span class="token punctuation">.</span>app<span class="token punctuation">.</span>ActivityManagerNative<span class="token punctuation">.</span><span class="token function">onTransact</span><span class="token punctuation">(</span>ActivityManagerNative<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">1646</span><span class="token punctuation">)</span>
+  at com<span class="token punctuation">.</span>android<span class="token punctuation">.</span>server<span class="token punctuation">.</span>am<span class="token punctuation">.</span>ActivityManagerService<span class="token punctuation">.</span><span class="token function">onTransact</span><span class="token punctuation">(</span>ActivityManagerService<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">2886</span><span class="token punctuation">)</span>
+  at android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Binder<span class="token punctuation">.</span><span class="token function">execTransact</span><span class="token punctuation">(</span>Binder<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">565</span><span class="token punctuation">)</span>
 
-<p>//add aidl</p>
-<pre><code>interface IOperationManager {
-   void operation(in Parameter parameter1 , in Parameter parameter2);
-   void registerListener(in IOnOperationCompletedListener listener);
-   void unregisterListener(in IOnOperationCompletedListener listener);
-}</code></pre><p>//计算完成结果，给客户端</p>
-<pre><code>interface IOnOperationCompletedListener {
-    void onOperationCompleted(in Parameter result);
-}</code></pre><p>//实现stub</p>
-<pre><code>private IOperationManager.Stub stub = new IOperationManager.Stub() {
-    @Override
-    public void operation(Parameter parameter1, Parameter parameter2) throws RemoteException {
-        try {
-            Log.e(TAG, &quot;operation 被调用，延时5秒，模拟耗时计算&quot;);
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        int param1 = parameter1.getParam();
-        int param2 = parameter2.getParam();
-        Parameter result = new Parameter(param1 * param2);
-        //在操作 RemoteCallbackList 前，必须先调用其 beginBroadcast 方法
-        //此外，beginBroadcast 必须和 finishBroadcast配套使用
-        int count = callbackList.beginBroadcast();
-        for (int i = 0; i &lt; count; i++) {
-            IOnOperationCompletedListener listener = callbackList.getBroadcastItem(i);
-            if (listener != null) {
-                listener.onOperationCompleted(result);   //提供数据result给客户端
-            }
-        }
-        callbackList.finishBroadcast();
-        Log.e(TAG, &quot;计算结束&quot;);
-    }
-
-    @Override
-    public void registerListener(IOnOperationCompletedListener listener) throws RemoteException {
-        callbackList.register(listener);
-        Log.e(TAG, &quot;registerListener 注册回调成功&quot;);   //客户端调用功能直接注册
-    }
-
-    @Override
-    public void unregisterListener(IOnOperationCompletedListener listener) throws RemoteException {
-        callbackList.unregister(listener);
-        Log.e(TAG, &quot;unregisterListener 解除注册回调成功&quot;);
-    }
-};
-
-public IBinder onBind(Intent intent) {
-        return stub;
-}</code></pre><h2 id="2-客户端"><a href="#2-客户端" class="headerlink" title="2.客户端"></a>2.客户端</h2><p>//binder到服务端</p>
-<pre><code>bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-
-private ServiceConnection serviceConnection = new ServiceConnection() {
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        iOperationManager = IOperationManager.Stub.asInterface(service);   //获取iOperationManager
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        iOperationManager = null;
-    }
-};</code></pre><p>//通过iOperationManager调用aidl方法来访问server端</p>
-<pre><code>case R.id.btn_unregisterListener: {
-    if (iOperationManager != null) {
-        try {
-            iOperationManager.unregisterListener(completedListener);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-    break;
-}
-case R.id.btn_operation: {
-
-    final int param1 = Integer.valueOf(et_param1.getText().toString());
-    final int param2 = Integer.valueOf(et_param2.getText().toString());
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            Parameter parameter1 = new Parameter(param1);
-            Parameter parameter2 = new Parameter(param2);
-            if (iOperationManager != null) {
-                try {
-                    iOperationManager.operation(parameter1, parameter2);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }).start();
-    break;
-}</code></pre><p>//实现 completedListener来处理返回结果</p>
-<pre><code>private IOnOperationCompletedListener completedListener = new IOnOperationCompletedListener.Stub() {
-    @Override
-    public void onOperationCompleted(final Parameter result) throws RemoteException {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                et_result.setText(&quot;运算结果： &quot; + result.getParam());
-            }
-        });
-    }
-};</code></pre>
+</code></pre>
+<pre><code>//binder server  onTransact
+&quot;Binder:17922_1&quot; prio=5 tid=8 Blocked
+  | group=&quot;main&quot; sCount=1 dsCount=0 obj=0x12c69940 self=0x7f97e12400
+  | sysTid=17961 nice=-2 cgrp=default sched=0/0 handle=0x7f96286450
+  | state=S schedstat=( 0 0 0 ) utm=0 stm=0 core=4 HZ=100
+  | stack=0x7f9618c000-0x7f9618e000 stackSize=1005KB
+  | held mutexes=
+  at com.android.commands.monkey.Monkey$ActivityController.appCrashed(Monkey.java:306)
+  - waiting to lock &lt;0x0b9d2b64&gt; (a com.android.commands.monkey.Monkey) held by thread 1
+  at android.app.IActivityController$Stub.onTransact(IActivityController.java:92)
+  at android.os.Binder.execTransact(Binder.java:565)</code></pre>
             </div>
             <hr/>
 
@@ -674,7 +640,7 @@ case R.id.btn_operation: {
                         <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
                     </div>
                     <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                        <img src="/medias/reward/wechat.jpg" class="reward-img" alt="微信打赏二维码">
                     </div>
                 </div>
             </div>
@@ -719,11 +685,11 @@ case R.id.btn_operation: {
                 </a>
             </div>
             <br/>
-            <a  href="/2019/09/21/AIDL 使用/">
-                    《AIDL 使用》
+            <a  href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/">
+                    《Binder调用结构流程图》
             </a> 由
-            <a href="http://dongwang0623.com">
-                蓝色天空
+            <a href="http://dongwang0623.cn">
+                wangdong
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                 知识共享署名 4.0 国际许可协议
@@ -765,22 +731,25 @@ case R.id.btn_operation: {
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/09/21/FAILED BINDER TRANSACTION/">
+                <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-java-client-duan-he-java-service-duan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Binder通信介绍和示例(java client端和java service端)">
                         
-                        <span class="card-title">FAILED BINDER TRANSACTION</span>
+                        <span class="card-title">Binder通信介绍和示例(java client端和java service端)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.异常Log Pattern
+                            一、 AIDL binderService来实现1.aidl server端
 
-BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
-ActivityManager: Kil
+创建aidl文件，写接口方法
+// IDeleteFIle.aidl
+package com.example.binderserver;
+
+// Declare
                         
                     </div>
                     <div class="publish-info">
@@ -789,8 +758,12 @@ ActivityManager: Kil
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            蓝色天空
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -800,10 +773,6 @@ ActivityManager: Kil
                     
                     <a href="/tags/Binder/">
                         <span class="chip bg-color">Binder</span>
-                    </a>
-                    
-                    <a href="/tags/Android-Stability/">
-                        <span class="chip bg-color">Android Stability</span>
                     </a>
                     
                 </div>
@@ -817,32 +786,35 @@ ActivityManager: Kil
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/09/21/Binder通信介绍和示例(c client端和 c service端  java client端和c service端)/">
+                <a href="/2019/06/10/envconfig/linux16.04-da-jian-opengrok/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Binder通信介绍和示例(c client端和 c service端  java client端和c service端)">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Linux16.04 搭建openGrok">
                         
-                        <span class="card-title">Binder通信介绍和示例(c client端和 c service端  java client端和c service端)</span>
+                        <span class="card-title">Linux16.04 搭建openGrok</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.Java端 binder client端
-ServiceManager.getService获取binder，然后调用binder.transact来通信
-@MainActivity
-    public static final St
+                            https://blog.csdn.net/jerkspan/article/details/87861289
+1.安装tomcat8 sudo apt-get install exuberant-ctags tomcat8
+ sudo /
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            蓝色天空
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -850,8 +822,12 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Binder/">
-                        <span class="chip bg-color">Binder</span>
+                    <a href="/tags/环境配置/">
+                        <span class="chip bg-color">环境配置</span>
+                    </a>
+                    
+                    <a href="/tags/openGrok/">
+                        <span class="chip bg-color">openGrok</span>
                     </a>
                     
                 </div>
@@ -971,10 +947,13 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">年份</span>
-            <a href="http://dongwang0623.com" target="_blank">蓝色天空</a>
+            <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">8.3k</span>&nbsp;字
             
             
             
@@ -993,6 +972,8 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
             </span>
             
             <br>
+            
+     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -1039,25 +1020,38 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
             </script>
             <br>
             
+      -->
+            
+            
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
     </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
+        <i class="fab fa-csdn">CSDN</i>
+    </a>
+
+
 
 </div>
     </div>

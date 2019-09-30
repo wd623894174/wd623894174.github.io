@@ -4,11 +4,18 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="FAILED BINDER TRANSACTION, 蓝色天空">
-    <meta name="description" content="1.异常Log Pattern
+    <meta name="keywords" content="Ubuntu16.04下安装破解secureCRT和secureFX的操作记录, 蓝色天空">
+    <meta name="description" content="环境配置参考网址:
 
-BroadcastQueue: Can&amp;#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
-ActivityManager: Kil">
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
+
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +23,7 @@ ActivityManager: Kil">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>FAILED BINDER TRANSACTION | 蓝色天空</title>
+    <title>Ubuntu16.04下安装破解secureCRT和secureFX的操作记录 | 蓝色天空</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -212,7 +219,7 @@ ActivityManager: Kil">
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/wd623894174/" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -268,7 +275,7 @@ ActivityManager: Kil">
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/wd623894174/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -287,13 +294,13 @@ ActivityManager: Kil">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        FAILED BINDER TRANSACTION
+                        Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
                     </div>
                 </div>
             </div>
@@ -405,12 +412,12 @@ ActivityManager: Kil">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Binder/">
-                                <span class="chip bg-color">Binder</span>
+                            <a href="/tags/环境配置/">
+                                <span class="chip bg-color">环境配置</span>
                             </a>
                         
-                            <a href="/tags/Android-Stability/">
-                                <span class="chip bg-color">Android Stability</span>
+                            <a href="/tags/pixel编译/">
+                                <span class="chip bg-color">pixel编译</span>
                             </a>
                         
                     </div>
@@ -418,15 +425,38 @@ ActivityManager: Kil">
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/环境配置/" class="post-category">
+                                环境配置
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-09-21
+                    2019-06-10
                 </div>
 
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        970
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        4 分
+                    </div>
+                    
                 
 				
 				
@@ -440,155 +470,100 @@ ActivityManager: Kil">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="1-异常Log-Pattern"><a href="#1-异常Log-Pattern" class="headerlink" title="1.异常Log Pattern"></a>1.异常Log Pattern</h2><a id="more"></a>
-
-<pre><code>BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
-ActivityManager: Killing 8047:com.my.demo/1000 (adj 0): scheduleCrash for &#39;can&#39;t deliver broadcast&#39; failed
-BroadcastQueue: Failure sending broadcast Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) }
-BroadcastQueue: android.os.DeadObjectException: Transaction failed on small parcel; remote process probably died
-BroadcastQueue:     at android.os.BinderProxy.transactNative(Native Method)
-BroadcastQueue:     at android.os.BinderProxy.transact(Binder.java:764)
-BroadcastQueue:     at android.app.IApplicationThread$Stub$Proxy.scheduleRegisteredReceiver(IApplicationThread.java:1560)
-BroadcastQueue:     at com.android.server.am.BroadcastQueue.performReceiveLocked(BroadcastQueue.java:491)
-BroadcastQueue:     at com.android.server.am.BroadcastQueue.deliverToRegisteredReceiverLocked(BroadcastQueue.java:703)
-BroadcastQueue:     at com.android.server.am.BroadcastQueue.processNextBroadcast(BroadcastQueue.java:858)
-BroadcastQueue:     at com.android.server.am.BroadcastQueue$BroadcastHandler.handleMessage(BroadcastQueue.java:171)
-BroadcastQueue:     at android.os.Handler.dispatchMessage(Handler.java:106)
-BroadcastQueue:     at android.os.Looper.loop(Looper.java:164)
-BroadcastQueue:     at android.os.HandlerThread.run(HandlerThread.java:65)
-BroadcastQueue:     at com.android.server.ServiceThread.run(ServiceThread.java:46)</code></pre><h2 id="2-Crash的过程"><a href="#2-Crash的过程" class="headerlink" title="2.Crash的过程"></a>2.Crash的过程</h2><p>出现两种情况</p>
+                <p>环境配置参考网址:</p>
 <ul>
-<li>1.data parcel size大于2m 200×1024</li>
-<li>2.异常 主要两种 deadobjectexception 调用的进程死掉了<br>另外为其他异常</li>
+<li><p><a href="https://blog.csdn.net/wd229047557/article/details/93134104" target="_blank" rel="noopener">ubuntu16.04配置和aosp下载</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/wd229047557/article/details/93645329" target="_blank" rel="noopener">Pxiel手机 AOSP下载及编译</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/wd229047557/article/details/91491113" target="_blank" rel="noopener">Ubuntu16.04下安装破解secureCRT和secureFX的操作记录</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/wd229047557/article/details/94207307" target="_blank" rel="noopener">Pixel 刷机AOSP和ubuntu adb配置</a></p>
+</li>
 </ul>
-<pre><code>@frameworks/base/core/jni/android_util_Binder.cpp
-void signalExceptionForError(JNIEnv* env, jobject obj, status_t err,
-        bool canThrowRemoteException, int parcelSize)
-case FAILED_TRANSACTION: {
-    ALOGE(&quot;!!! FAILED BINDER TRANSACTION !!!  (parcel size = %d)&quot;, parcelSize);
-    if (canThrowRemoteException &amp;&amp; parcelSize &gt; 200*1024) {
-        // bona fide large payload
-        exceptionToThrow = &quot;android/os/TransactionTooLargeException&quot;;
-        snprintf(msg, sizeof(msg)-1, &quot;data parcel size %d bytes&quot;, parcelSize);
-    } else {
-        // Heuristic: a payload smaller than this threshold &quot;shouldn&#39;t&quot; be too
-        // big, so it&#39;s probably some other, more subtle problem.  In practice
-        // it seems to always mean that the remote process died while the binder
-        // transaction was already in flight.
-        exceptionToThrow = (canThrowRemoteException)
-                ? &quot;android/os/DeadObjectException&quot;
-                : &quot;java/lang/RuntimeException&quot;;
-        snprintf(msg, sizeof(msg)-1,
-                &quot;Transaction failed on small parcel; remote process probably died&quot;);
-    }
-    jniThrowException(env, exceptionToThrow, msg);
-} break;</code></pre><p>//performReceiveLocked报错并且crash app</p>
-<pre><code>@BroadcastQueue.java
-482    void performReceiveLocked(ProcessRecord app, IIntentReceiver receiver,
-483            Intent intent, int resultCode, String data, Bundle extras,
-484            boolean ordered, boolean sticky, int sendingUser) throws RemoteException {
-485        // Send the intent to the receiver asynchronously using one-way binder calls.
-486        if (app != null) {
-487            if (app.thread != null) {
-488                // If we have an app thread, do the call through that so it is
-489                // correctly ordered with other one-way calls.
-490                try {
-491                    app.thread.scheduleRegisteredReceiver(receiver, intent, resultCode,
-492                            data, extras, ordered, sticky, sendingUser, app.repProcState);
-493                // TODO: Uncomment this when (b/28322359) is fixed and we aren&#39;t getting
-494                // DeadObjectException when the process isn&#39;t actually dead.
-495                //} catch (DeadObjectException ex) {
-496                // Failed to call into the process.  It&#39;s dying so just let it die and move on.
-497                //    throw ex;
-498                } catch (RemoteException ex) {
-499                    // Failed to call into the process. It&#39;s either dying or wedged. Kill it gently.
-500                    synchronized (mService) {
-501                        Slog.w(TAG, &quot;Can&#39;t deliver broadcast to &quot; + app.processName
-502                                + &quot; (pid &quot; + app.pid + &quot;). Crashing it.&quot;);  //here
-503                        app.scheduleCrash(&quot;can&#39;t deliver broadcast&quot;);  //crash app
-504                    }
-505                    throw ex;
-506                }
-507            } else {
-508                // Application has died. Receiver doesn&#39;t exist.
-509                throw new RemoteException(&quot;app.thread must not be null&quot;);
-510            }
-511        } else {
-512            receiver.performReceive(intent, resultCode, data, extras, ordered,
-513                    sticky, sendingUser);
-514        }
-515    }</code></pre><pre><code>@frameworks/base/services/core/java/com/android/server/am/ProcessRecord.java
-void scheduleCrash(String message) {
-    // Checking killedbyAm should keep it from showing the crash dialog if the process
-    // was already dead for a good / normal reason.
-    if (!killedByAm) {
-        if (thread != null) {
-            if (pid == Process.myPid()) {
-                Slog.w(TAG, &quot;scheduleCrash: trying to crash system process!&quot;);
-                return;
-            }
-            long ident = Binder.clearCallingIdentity();
-            try {
-                thread.scheduleCrash(message); //throw RemoteServiceException然后kill
-            } catch (RemoteException e) {
-                // If it&#39;s already dead our work is done. If it&#39;s wedged just kill it.
-                // We won&#39;t get the crash dialog or the error reporting.
-                kill(&quot;scheduleCrash for &#39;&quot; + message + &quot;&#39; failed&quot;, true);
-            } finally {
-                Binder.restoreCallingIdentity(ident);
-            }
-        }
-    }
-}</code></pre><pre><code>void kill(String reason, boolean noisy) {
-    if (!killedByAm) {
-        Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, &quot;kill&quot;);
-        if (noisy) {
-            Slog.i(TAG, &quot;Killing &quot; + toShortString() + &quot; (adj &quot; + setAdj + &quot;): &quot; + reason);
-        }
-        EventLog.writeEvent(EventLogTags.AM_KILL, userId, pid, processName, setAdj, reason);
-        Process.killProcessQuiet(pid);
-        ActivityManagerService.killProcessGroup(uid, pid);
-        if (!persistent) {
-            killed = true;
-            killedByAm = true;
-        }
-        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
-    }
-}</code></pre><p>@frameworks/base/core/java/android/app/ActivityThread.java</p>
-<pre><code>public void scheduleCrash(String msg) {
-    sendMessage(H.SCHEDULE_CRASH, msg);
-}
-1767                case SCHEDULE_CRASH:
-1768                    throw new RemoteServiceException((String)msg.obj);</code></pre><h2 id="3-Binder错误信息kernel-log"><a href="#3-Binder错误信息kernel-log" class="headerlink" title="3.Binder错误信息kernel log"></a>3.Binder错误信息kernel log</h2><pre><code>@binder.c
-4067err_alloc_t_failed:
-4068err_bad_call_stack:
-4069err_empty_call_stack:
-4070err_dead_binder:
-4071err_invalid_target_handle:
-...
-4081    binder_debug(BINDER_DEBUG_FAILED_TRANSACTION,
-4082         &quot;%d:%d transaction failed %d/%d, size %lld-%lld line %d\n&quot;,
-4083         proc-&gt;pid, thread-&gt;pid, return_error, return_error_param,
-4084         (u64)tr-&gt;data_size, (u64)tr-&gt;offsets_size,
-4085         return_error_line);</code></pre><pre><code>11-25 09:31:23.786059  1052  1052 I [128416.232769](6)[1052:ActivityManager]binder: 1025:1052 transaction failed 29201/-28, size 792-8 line 3781</code></pre><p>那么问题来了，这个过程也是使用binder.<br>同样是systemserver向应用发送，为什么之前不成功，现在可以了,因为当时空间不够，后面可能够了</p>
-<pre><code>return_error --&gt; 29201 --&gt; BR_FAILED_REPLY 
-return_error_param  --&gt; 28 --&gt; ENOSPC    /* No space left on device */
-31#define    ENOSPC    28    /* No space left on device */</code></pre><p>还有些错是parcel太大导致，这里是没有空间，可能注册广播太多，注销慢，或者逻辑错误，也可能是进程死了<br>还可以可能比如systemserver的线程都在做数据库之类的blocked</p>
-<h2 id="4-其他例子"><a href="#4-其他例子" class="headerlink" title="4.其他例子"></a>4.其他例子</h2><p><a href="https://ask.csdn.net/questions/682317" target="_blank" rel="noopener">https://ask.csdn.net/questions/682317</a></p>
-<pre><code>java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 3625220 bytes
-at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3982)
-at android.os.Handler.handleCallback(Handler.java:761)
-at android.os.Handler.dispatchMessage(Handler.java:98)
-at android.os.Looper.loop(Looper.java:156)
-at android.app.ActivityThread.main(ActivityThread.java:6523)
-at java.lang.reflect.Method.invoke(Native Method)
-at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:942)
-at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:832)
-Caused by: android.os.TransactionTooLargeException: data parcel size 3625220 bytes
-at android.os.BinderProxy.transactNative(Native Method)
-at android.os.BinderProxy.transact(Binder.java:617)
-at android.app.ActivityManagerProxy.activityStopped(ActivityManagerNative.java:3632)
-at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3974)</code></pre>
+<h3 id="1-ubuntu更新源"><a href="#1-ubuntu更新源" class="headerlink" title="1.ubuntu更新源"></a>1.ubuntu更新源</h3><p>把如下sources.list内容考入就好，适用于16.04版本</p>
+<pre><code>sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup   #备份当前也就是默认官方的源列表
+sudo gedit /etc/apt/sources.list         #修改sources.list文件中源的列表，删除全部内容，替换为国内源地址。 保存编辑好的文件。
+sudo apt-get update                      #更新源列表，换源后必须执行</code></pre><pre><code># deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted
+deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse
+deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties
+deb http://archive.canonical.com/ubuntu xenial partner
+deb-src http://archive.canonical.com/ubuntu xenial partner
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse</code></pre><h3 id="2-安装编译依赖软件"><a href="#2-安装编译依赖软件" class="headerlink" title="2.安装编译依赖软件"></a>2.安装编译依赖软件</h3><pre><code>1、安装JDK，分别执行以下命令
+$ sudo apt-get update
+$ sudo apt-get install openjdk-8-jdk
+
+2、切换java版本
+$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+
+3、安装相关的依赖包
+    sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib 
+ sudo apt-get install libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip</code></pre><h3 id="3-安装samba，并和window共享目录"><a href="#3-安装samba，并和window共享目录" class="headerlink" title="3.安装samba，并和window共享目录"></a>3.安装samba，并和window共享目录</h3><p>//下载samba，第一个需要，其他看情况</p>
+<pre><code>1 sudo apt-get install samba
+2 sudo apt-get install samba-common 
+3 sudo apt-get install smbfs     　　//在旧版的Ubuntu中，你可能需要使用 smbfs替代cifs-utils。 
+4 sudo apt-get install cifs-utils   //新版本 ubuntu1204已安装</code></pre><p>配置共享目录smaba</p>
+<pre><code>1.建立/workspace目录，给权限777，sudo chmod 777 /workspace
+2.配置samba        sudo vim /etc/samba/smb.conf 
+                最后面添加内容：    
+
+[work]
+    comment = work
+    path = /home/wangdong/work
+    browseable = yes
+    writable = yes
+    available = yes
+    guest ok = yes
+    public = yes
+    create mask = 0777
+    force user = wangdong
+  #必须加这个，让window创建的，也是wangdong账户，可以看ll
+3.重启samba服务     sudo /etc/init.d/smbd restart
+4.删除配置之后自动生成的目录，可以看到是有锁的。在重新建立目录. 在wangdong用户终端下：mkdir work share.建立文件测试就可以了。</code></pre><h3 id="4-下载Android-P代码"><a href="#4-下载Android-P代码" class="headerlink" title="4.下载Android P代码"></a>4.下载Android P代码</h3><p>参照: 是时候下载Android 9.0系统源码了</p>
+<p>####下载repo</p>
+<pre><code>sudo apt-get install git
+mkdir ~/bin
+PATH=~/bin:$PATH
+curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo
+chmod a+x ~/bin/repo
+sudo apt-get install python</code></pre><p>####下载源码</p>
+<pre><code>git config --global user.email &quot;piratemorgen@gmail.com&quot;
+git config --global user.name &quot;piratemorgen&quot;
+
+export REPO_URL=&#39;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#39;
+//下载所有代码，如果不需要执行下面这个就够了
+repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest
+//指定下载android-9.0.0_r8这个tag
+repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-9.0.0_r8  
+repo sync</code></pre><h3 id="5-新版本代码下载"><a href="#5-新版本代码下载" class="headerlink" title="5.新版本代码下载"></a>5.新版本代码下载</h3><p><a href="https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds" target="_blank" rel="noopener">https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds</a></p>
+<p>目前新的是android-9.0.0.0_r40 ,r8感觉太老了，建议更新</p>
+<p>对应驱动版本<a href="https://developers.google.cn/android/drivers#sailfishpq3a.190605.003" target="_blank" rel="noopener">https://developers.google.cn/android/drivers#sailfishpq3a.190605.003</a>  (请注意机型)</p>
+<p>Pixel binaries for Android 9.0.0 (PQ3A.190605.003)</p>
+<h3 id="6-kernel内核的下载和编译"><a href="#6-kernel内核的下载和编译" class="headerlink" title="6.kernel内核的下载和编译"></a>6.kernel内核的下载和编译</h3><pre><code>https://source.android.com/setup/build/building-kernels
+
+下载命令
+../bin/repo init -u https://aosp.tuna.tsinghua.edu.cn/kernel/manifest -b android-msm-marlin-3.18-pie-qpr2
+../bin/repo sync
+
+编译命令
+build/build.sh
+
+烧写
+1种make 时加入环境path路径 export TARGET_PREBUILT_KERNEL=DIST_DIR/Image.lz4-dtb
+第二种Image.lz4-dtb放入device/google/marlin-kernel</code></pre>
             </div>
             <hr/>
 
@@ -703,7 +678,7 @@ at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3974)</code></pre
                         <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
                     </div>
                     <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                        <img src="/medias/reward/wechat.jpg" class="reward-img" alt="微信打赏二维码">
                     </div>
                 </div>
             </div>
@@ -748,11 +723,11 @@ at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3974)</code></pre
                 </a>
             </div>
             <br/>
-            <a  href="/2019/09/21/FAILED BINDER TRANSACTION/">
-                    《FAILED BINDER TRANSACTION》
+            <a  href="/2019/06/10/envconfig/ubuntu16.04-xia-an-zhuang-po-jie-securecrt-he-securefx-de-cao-zuo-ji-lu/">
+                    《Ubuntu16.04下安装破解secureCRT和secureFX的操作记录》
             </a> 由
-            <a href="http://dongwang0623.com">
-                蓝色天空
+            <a href="http://dongwang0623.cn">
+                wangdong
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                 知识共享署名 4.0 国际许可协议
@@ -790,51 +765,60 @@ at android.app.ActivityThread$StopInfo.run(ActivityThread.java:3974)</code></pre
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/09/21/FAILED BINDER TRANSACTION/">
+                <a href="/2019/06/10/envconfig/pixel-shua-ji-aosp-he-ubuntu-adb-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Pixel 刷机AOSP 和ubuntu adb配置">
                         
-                        <span class="card-title">FAILED BINDER TRANSACTION</span>
+                        <span class="card-title">Pixel 刷机AOSP 和ubuntu adb配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.异常Log Pattern
+                            环境配置参考网址:
 
-BroadcastQueue: Can&#39;t deliver broadcast to com.my.app (pid 8047). Crashing it.
-ActivityManager: Kil
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
+
+
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-21
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            蓝色天空
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Binder/">
-                        <span class="chip bg-color">Binder</span>
+                    <a href="/tags/环境配置/">
+                        <span class="chip bg-color">环境配置</span>
                     </a>
                     
-                    <a href="/tags/Android-Stability/">
-                        <span class="chip bg-color">Android Stability</span>
+                    <a href="/tags/pixel编译/">
+                        <span class="chip bg-color">pixel编译</span>
                     </a>
                     
                 </div>
@@ -848,39 +832,41 @@ ActivityManager: Kil
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/09/21/AIDL 使用/">
+                <a href="/2019/06/10/envconfig/ubuntu16.04-pei-zhi-he-aosp-xia-zai/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="AIDL 使用">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="ubuntu16.04配置和aosp下载">
                         
-                        <span class="card-title">AIDL 使用</span>
+                        <span class="card-title">ubuntu16.04配置和aosp下载</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            [toc]
+                            环境配置参考网址:
+
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
 
 
-[toc]
-1.服务端
-
-//add aidl
-interface IOperationManager {
-   void operation(in Parameter parameter1 , in Parameter p
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/list/" class="post-category">
-                                    list
+                            <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
                                 </a>
                             
                             
@@ -890,8 +876,12 @@ interface IOperationManager {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Binder/">
-                        <span class="chip bg-color">Binder</span>
+                    <a href="/tags/环境配置/">
+                        <span class="chip bg-color">环境配置</span>
+                    </a>
+                    
+                    <a href="/tags/pixel编译/">
+                        <span class="chip bg-color">pixel编译</span>
                     </a>
                     
                 </div>
@@ -1011,10 +1001,13 @@ interface IOperationManager {
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">年份</span>
-            <a href="http://dongwang0623.com" target="_blank">蓝色天空</a>
+            <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">8.3k</span>&nbsp;字
             
             
             
@@ -1033,6 +1026,8 @@ interface IOperationManager {
             </span>
             
             <br>
+            
+     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -1079,25 +1074,38 @@ interface IOperationManager {
             </script>
             <br>
             
+      -->
+            
+            
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
     </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
+        <i class="fab fa-csdn">CSDN</i>
+    </a>
+
+
 
 </div>
     </div>

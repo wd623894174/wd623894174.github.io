@@ -209,7 +209,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/wd623894174/" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -265,7 +265,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/wd623894174/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -336,6 +336,13 @@
 
 <div id="page" class="carousel carousel-slider center index-cover" data-indicators="true" style="margin-top: -64px;">
     
+    <div id="prev-cover" class="left waves-effect carousel-control">
+        <i class="icon fas fa-angle-left"></i>
+    </div>
+    <div id="next-cover" class="right waves-effect carousel-control">
+        <i class="icon fas fa-angle-right"></i>
+    </div>
+    
 
     <div class="carousel-item red white-text bg-cover about-cover">
         <div class="container" style="right: 0px;left: 0px;">
@@ -344,7 +351,7 @@
         <div class="brand">
             <div class="title center-align">
                 
-                subtitle
+                蓝色天空
                 
             </div>
 
@@ -382,34 +389,100 @@
                 </a>
 
                 
-                <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light btn" target="_blank">
+                <a href="https://github.com/wd623894174/" class="waves-effect waves-light btn" target="_blank">
                     <i class="fab fa-github-alt"></i>Github
                 </a>
                 
             </div>
             <div class="cover-social-link">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
     </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
+        <i class="fab fa-csdn">CSDN</i>
+    </a>
+
+
 
 </div>
         </div>
     </div>
 
+    
+    
+
+    
+    
+    <div class="carousel-item amber white-text carousel-post bg-cover"
+            style="background-image: url('/medias/featureimages/1.jpg');">
+        <div class="container" style="right: 0px;left: 0px;">
+            <div class="row">
+                <div class="col s10 offset-s1">
+                    <div class="title center-align">AIDL 使用</div>
+                    <div class="description center-align">
+                    
+                        1.服务端
+
+//add aidl
+interface IOperationManager {
+   void operation(in Parameter parameter1 , in Parameter parameter2);
+  
+                    
+                    </div>
+                    <div class="cover-btns">
+                        <a href="/2019/09/21/lunbo/aidl-shi-yong/" class="waves-effect waves-light btn" target="_blank">
+                            <i class="icon far fa-eye fa-fw"></i>阅读更多
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="carousel-item amber white-text carousel-post bg-cover"
+            style="background-image: url('https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/transaction_no_oneway.jpeg');">
+        <div class="container" style="right: 0px;left: 0px;">
+            <div class="row">
+                <div class="col s10 offset-s1">
+                    <div class="title center-align">Binder调用结构流程图</div>
+                    <div class="description center-align">
+                    
+                        参考link:
+
+http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解Android Binder通信架构
+http://gityuan.com/2018/02/17/mo
+                    
+                    </div>
+                    <div class="cover-btns">
+                        <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/" class="waves-effect waves-light btn" target="_blank">
+                            <i class="icon far fa-eye fa-fw"></i>阅读更多
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     
 </div>
 
@@ -495,55 +568,21 @@ $(function () {
 
     
     
-    <div class="col s12 m6" >
-        <div class="post-card" style="background-image: url('/medias/featureimages/15.jpg')">
+    <div class="col s12" >
+        <div class="post-card" style="background-image: url('https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/binderIoctl.jpeg')">
             <div class="post-body">
                 <div class="post-categories">
                     
-                    <a href="/categories/list/" class="category">list</a>
+                    <a href="/categories/Android-Binder/" class="category">Android Binder</a>
                     
                 </div>
-                <a href="/2019/09/21/AIDL 使用/">
-                    <h3 class="post-title">AIDL 使用</h3>
-                </a>
-                <p class="post-description">
-                    
-                        [toc]
-
-
-[toc]
-1.服务端
-
-//add aidl
-interface IOperationManager {
-   void 
-                    
-                </p>
-                <a href="/2019/09/21/AIDL 使用/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FF5E3A 0%, #FF2A68 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="col s12 m6" >
-        <div class="post-card" style="background-image: url('/medias/featureimages/4.jpg')">
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                </div>
-                <a href="/2019/09/21/Binder调用结构流程图/">
+                <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/">
                     <h3 class="post-title">Binder调用结构流程图</h3>
                 </a>
-                <p class="post-description">
-                    
-                        参考link:
+                <p class="post-description">参考link:
 
-http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解A
-                    
-                </p>
-                <a href="/2019/09/21/Binder调用结构流程图/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #EF4DB6 0%, #C643FC 100%)" target="_blank">
+http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解Android Binder通信</p>
+                <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FF5E3A 0%, #FF2A68 100%)" target="_blank">
                     <i class="icon far fa-eye fa-fw"></i>阅读更多
                 </a>
             </div>
@@ -569,7 +608,7 @@ http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解A
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/FAILED BINDER TRANSACTION/">
+                    <a href="/2019/09/21/failed-binder-transaction/">
                         <div class="card-image">
                             
                             
@@ -594,65 +633,10 @@ ActivityManager: Kil
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                蓝色天空
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Binder/">
-                            <span class="chip bg-color">Binder</span>
-                        </a>
-                        
-                        <a href="/tags/Android-Stability/">
-                            <span class="chip bg-color">Android Stability</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/09/21/AIDL 使用/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="AIDL 使用">
-                            
-                            <span class="card-title">AIDL 使用</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [toc]
-
-
-[toc]
-1.服务端
-
-//add aidl
-interface IOperationManager {
-   void operation(in Parameter parameter1 , in Parameter p
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-21
-                            </span>
-                            <span class="publish-author">
-                                
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/list/" class="post-category">
-                                    list
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
                                 </a>
                                 
                                 
@@ -674,7 +658,58 @@ interface IOperationManager {
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/Binder通信介绍和示例(c client端和 c service端  java client端和c service端)/">
+                    <a href="/2019/09/21/lunbo/aidl-shi-yong/">
+                        <div class="card-image">
+                            
+                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="AIDL 使用">
+                            
+                            <span class="card-title">AIDL 使用</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                1.服务端
+
+//add aidl
+interface IOperationManager {
+   void operation(in Parameter parameter1 , in Parameter parameter2);
+  
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-21
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Binder/">
+                            <span class="chip bg-color">Binder</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-c-client-duan-he-c-service-duan-java-client-duan-he-c-service-duan/">
                         <div class="card-image">
                             
                             
@@ -699,8 +734,12 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                蓝色天空
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
                                 
                             </span>
                         </div>
@@ -720,7 +759,7 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/Binder通信介绍和示例(java client端和java service端)/">
+                    <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-java-client-duan-he-java-service-duan/">
                         <div class="card-image">
                             
                             
@@ -748,8 +787,12 @@ package com.example.binderserver;
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                蓝色天空
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
                                 
                             </span>
                         </div>
@@ -769,11 +812,10 @@ package com.example.binderserver;
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/Binder调用结构流程图/">
+                    <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/">
                         <div class="card-image">
                             
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Binder调用结构流程图">
+                            <img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/binder/binderIoctl.jpeg" class="responsive-img" alt="Binder调用结构流程图">
                             
                             <span class="card-title">Binder调用结构流程图</span>
                         </div>
@@ -794,8 +836,12 @@ http://gityuan.com/2018/02/17/mo
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                蓝色天空
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
                                 
                             </span>
                         </div>
@@ -806,6 +852,242 @@ http://gityuan.com/2018/02/17/mo
                         
                         <a href="/tags/Binder/">
                             <span class="chip bg-color">Binder</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/06/10/envconfig/linux16.04-da-jian-opengrok/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Linux16.04 搭建openGrok">
+                            
+                            <span class="card-title">Linux16.04 搭建openGrok</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                https://blog.csdn.net/jerkspan/article/details/87861289
+1.安装tomcat8 sudo apt-get install exuberant-ctags tomcat8
+ sudo /
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/环境配置/">
+                            <span class="chip bg-color">环境配置</span>
+                        </a>
+                        
+                        <a href="/tags/openGrok/">
+                            <span class="chip bg-color">openGrok</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/06/10/envconfig/pixel-shua-ji-aosp-he-ubuntu-adb-pei-zhi/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Pixel 刷机AOSP 和ubuntu adb配置">
+                            
+                            <span class="card-title">Pixel 刷机AOSP 和ubuntu adb配置</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                环境配置参考网址:
+
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
+
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/环境配置/">
+                            <span class="chip bg-color">环境配置</span>
+                        </a>
+                        
+                        <a href="/tags/pixel编译/">
+                            <span class="chip bg-color">pixel编译</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/06/10/envconfig/ubuntu16.04-xia-an-zhuang-po-jie-securecrt-he-securefx-de-cao-zuo-ji-lu/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Ubuntu16.04下安装破解secureCRT和secureFX的操作记录">
+                            
+                            <span class="card-title">Ubuntu16.04下安装破解secureCRT和secureFX的操作记录</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                环境配置参考网址:
+
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
+
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/环境配置/">
+                            <span class="chip bg-color">环境配置</span>
+                        </a>
+                        
+                        <a href="/tags/pixel编译/">
+                            <span class="chip bg-color">pixel编译</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/06/10/envconfig/ubuntu16.04-pei-zhi-he-aosp-xia-zai/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="ubuntu16.04配置和aosp下载">
+                            
+                            <span class="card-title">ubuntu16.04配置和aosp下载</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                环境配置参考网址:
+
+ubuntu16.04配置和aosp下载
+
+Pxiel手机 AOSP下载及编译
+
+Ubuntu16.04下安装破解secureCRT和secureFX的操作记录
+
+Pixel 刷机AOSP和ubuntu adb配置
+
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-10
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/环境配置/" class="post-category">
+                                    环境配置
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/环境配置/">
+                            <span class="chip bg-color">环境配置</span>
+                        </a>
+                        
+                        <a href="/tags/pixel编译/">
+                            <span class="chip bg-color">pixel编译</span>
                         </a>
                         
                     </div>
@@ -826,10 +1108,13 @@ http://gityuan.com/2018/02/17/mo
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">年份</span>
-            <a href="http://dongwang0623.com" target="_blank">蓝色天空</a>
+            <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">8.3k</span>&nbsp;字
             
             
             
@@ -848,6 +1133,8 @@ http://gityuan.com/2018/02/17/mo
             </span>
             
             <br>
+            
+     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -894,25 +1181,38 @@ http://gityuan.com/2018/02/17/mo
             </script>
             <br>
             
+      -->
+            
+            
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
     </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
+        <i class="fab fa-csdn">CSDN</i>
+    </a>
+
+
 
 </div>
     </div>
