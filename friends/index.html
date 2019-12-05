@@ -23,11 +23,8 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <style type="text/css">
-        
-    </style>
-
-    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
@@ -51,7 +48,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="" class="waves-effect waves-light">
+    <a href="/" class="waves-effect waves-light">
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
@@ -140,69 +137,69 @@
 
     <ul class="menu-list mobile-menu-list">
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
 			
-				<a href="" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-home"></i>
-					
-					首页
-				</a>
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
 			
-				<a href="/tags" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-tags"></i>
-					
-					标签
-				</a>
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
 			
-				<a href="/categories" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-bookmark"></i>
-					
-					分类
-				</a>
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
 			
-				<a href="/archives" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-archive"></i>
-					
-					归档
-				</a>
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
 			
-				<a href="/about" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-user-circle"></i>
-					
-					关于
-				</a>
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
 			
-				<a href="/friends" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-address-book"></i>
-					
-					友情链接
-				</a>
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
           
         </li>
         
@@ -293,11 +290,11 @@
 
             <div class="description center-align">
                 
-                <span id="typed"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+                <span id="subtitle"></span>
+                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
                 <script>
-                    var typed = new Typed("#typed", {
-                        strings: ['生活不止眼前的苟且，还有诗和远方', '青春活泼的心，决不作悲哀的留滞'],
+                    var typed = new Typed("#subtitle", {
+                        strings: ['生活不止眼前的苟且，还有诗和远方','青春活泼的心，决不作悲哀的留滞'],
                         startDelay: 300,
                         typeSpeed: 100,
                         loop: true,
@@ -360,8 +357,7 @@
     }
 
     .frind-ship .title h1 {
-        line-height: 0.8rem;
-        padding-bottom: 16px;
+        padding-bottom: 5px;
         border-bottom: 2px solid #fff;
         position: relative;
         top:-15px;
@@ -609,9 +605,6 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
             
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">8.3k</span>&nbsp;字
-            
             
             
             
@@ -630,7 +623,6 @@
             
             <br>
             
-     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -675,10 +667,8 @@
                 }
                 setInterval(siteTime, 1000);
             </script>
+            
             <br>
-            
-      -->
-            
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
@@ -701,12 +691,6 @@
 
 
 
-
-
-
-    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
-        <i class="fab fa-csdn">CSDN</i>
-    </a>
 
 
 
@@ -810,6 +794,8 @@ $(function () {
     <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
     
     
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

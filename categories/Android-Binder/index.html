@@ -23,11 +23,8 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <style type="text/css">
-        
-    </style>
-
-    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
@@ -51,7 +48,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="" class="waves-effect waves-light">
+    <a href="/" class="waves-effect waves-light">
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
@@ -140,69 +137,69 @@
 
     <ul class="menu-list mobile-menu-list">
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
 			
-				<a href="" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-home"></i>
-					
-					首页
-				</a>
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
 			
-				<a href="/tags" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-tags"></i>
-					
-					标签
-				</a>
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
 			
-				<a href="/categories" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-bookmark"></i>
-					
-					分类
-				</a>
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
 			
-				<a href="/archives" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-archive"></i>
-					
-					归档
-				</a>
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
 			
-				<a href="/about" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-user-circle"></i>
-					
-					关于
-				</a>
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
           
         </li>
         
-<li class="m-nav-item">
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
 			
-				<a href="/friends" class="waves-effect waves-light">
-					
-					<i class="fa-fw fas fa-address-book"></i>
-					
-					友情链接
-				</a>
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
           
         </li>
         
@@ -293,11 +290,11 @@
 
             <div class="description center-align">
                 
-                <span id="typed"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+                <span id="subtitle"></span>
+                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
                 <script>
-                    var typed = new Typed("#typed", {
-                        strings: ['生活不止眼前的苟且，还有诗和远方', '青春活泼的心，决不作悲哀的留滞'],
+                    var typed = new Typed("#subtitle", {
+                        strings: ['生活不止眼前的苟且，还有诗和远方','青春活泼的心，决不作悲哀的留滞'],
                         startDelay: 300,
                         typeSpeed: 100,
                         loop: true,
@@ -335,11 +332,20 @@
                 
                 
                 
-                <a href="/categories/Android-Binder/" title="Android Binder: 5">
+                <a href="/categories/Android-Binder/" title="Android Binder: 7">
                     <span class="chip center-align waves-effect waves-light
                              chip-active "
                             style="background-color: #F9EBEA;">Android Binder
-                        <span class="tag-length">5</span>
+                        <span class="tag-length">7</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/Android-Build/" title="Android Build: 4">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #F5EEF8;">Android Build
+                        <span class="tag-length">4</span>
                     </span>
                 </a>
                 
@@ -347,7 +353,16 @@
                 <a href="/categories/环境配置/" title="环境配置: 4">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F5EEF8;">环境配置
+                            style="background-color: #D5F5E3;">环境配置
+                        <span class="tag-length">4</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/Android-Notification/" title="Android Notification: 4">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #E8F8F5;">Android Notification
                         <span class="tag-length">4</span>
                     </span>
                 </a>
@@ -365,11 +380,96 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/failed-binder-transaction/">
+                    <a href="/2019/12/05/binder/dms-zhong-kua-jin-cheng-de-parcelable-feng-zhuang/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
+                            <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="Dms中跨进程的Parcelable封装">
+                            
+                            <span class="card-title">Dms中跨进程的Parcelable封装</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                1. 当前是使用enum 接口Parcelable来传递数据
+优点：可以直接把sdk里面的文件丢进来，加上Parcelable就可以，给client端调用也很直观。
+缺点：1.enum占内存比基础类型多，android不推荐用枚举。 2.参
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/12/05/binder/androidstudio-sheng-cheng-parcelable-wen-jian-fang-fa/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="AndroidStudio 生成Parcelable文件方法.md">
+                            
+                            <span class="card-title">AndroidStudio 生成Parcelable文件方法.md</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                0. Parcelable支持的类型String
+int
+Float
+Interger
+
+List --ArrayList
+Map  --HashMap示例
+private Map&lt;String, Integer&gt; dmsMap
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Android-Binder/" class="post-category">
+                                    Android Binder
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/09/21/binder/failed-binder-transaction/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="FAILED BINDER TRANSACTION">
                             
                             <span class="card-title">FAILED BINDER TRANSACTION</span>
                         </div>
@@ -417,7 +517,8 @@ ActivityManager: Kil
                     <a href="/2019/09/21/lunbo/aidl-shi-yong/">
                         <div class="card-image tag-image">
                             
-                            <img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/banner/0.jpg" class="responsive-img" alt="AIDL 使用">
+                            
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="AIDL 使用">
                             
                             <span class="card-title">AIDL 使用</span>
                         </div>
@@ -427,10 +528,11 @@ ActivityManager: Kil
                             
                                 1.服务端
 
+
 //add aidl
 interface IOperationManager {
    void operation(in Parameter parameter1 , in Parameter parameter2);
-  
+ 
                             
                         </div>
                         <div class="publish-info">
@@ -464,11 +566,11 @@ interface IOperationManager {
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-c-client-duan-he-c-service-duan-java-client-duan-he-c-service-duan/">
+                    <a href="/2019/09/21/binder/binder-tong-xin-jie-shao-he-shi-li-c-client-duan-he-c-service-duan-java-client-duan-he-c-service-duan/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Binder通信介绍和示例(c client端和 c service端  java client端和c service端)">
+                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Binder通信介绍和示例(c client端和 c service端  java client端和c service端)">
                             
                             <span class="card-title">Binder通信介绍和示例(c client端和 c service端  java client端和c service端)</span>
                         </div>
@@ -513,11 +615,11 @@ ServiceManager.getService获取binder，然后调用binder.transact来通信
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/09/21/binder-tong-xin-jie-shao-he-shi-li-java-client-duan-he-java-service-duan/">
+                    <a href="/2019/09/21/binder/binder-tong-xin-jie-shao-he-shi-li-java-client-duan-he-java-service-duan/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Binder通信介绍和示例(java client端和java service端)">
+                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Binder通信介绍和示例(java client端和java service端)">
                             
                             <span class="card-title">Binder通信介绍和示例(java client端和java service端)</span>
                         </div>
@@ -568,7 +670,8 @@ package com.example.binderserver;
                     <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/">
                         <div class="card-image tag-image">
                             
-                            <img src="https://raw.githubusercontent.com/wd623894174/blogPic/master/banner/1.jpg" class="responsive-img" alt="Binder调用结构流程图">
+                            
+                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Binder调用结构流程图">
                             
                             <span class="card-title">Binder调用结构流程图</span>
                         </div>
@@ -628,9 +731,6 @@ http://gityuan.com/2018/02/17/mo
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
             
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">8.3k</span>&nbsp;字
-            
             
             
             
@@ -649,7 +749,6 @@ http://gityuan.com/2018/02/17/mo
             
             <br>
             
-     <!--
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -694,10 +793,8 @@ http://gityuan.com/2018/02/17/mo
                 }
                 setInterval(siteTime, 1000);
             </script>
+            
             <br>
-            
-      -->
-            
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
@@ -720,12 +817,6 @@ http://gityuan.com/2018/02/17/mo
 
 
 
-
-
-
-    <a href="https://blog.csdn.net/wd229047557" class="tooltipped" target="_blank" data-tooltip="关注我的csdn: https://blog.csdn.net/wd229047557" data-position="top" data-delay="50">
-        <i class="fab fa-csdn">CSDN</i>
-    </a>
 
 
 
@@ -829,6 +920,8 @@ $(function () {
     <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
     
     
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

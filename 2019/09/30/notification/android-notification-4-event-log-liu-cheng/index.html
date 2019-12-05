@@ -1,0 +1,1412 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Android Notification(4) -- event log 流程, 蓝色天空">
+    <meta name="description" content="1.1 event log定义及 log流程
+在event log中搜索 notification_可以看到通知各个时间段log大概有 ==notification_enqueue  – notification_expansion –no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Android Notification(4) -- event log 流程 | 蓝色天空</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">蓝色天空</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">蓝色天空</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/wd623894174/" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/wd623894174/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Android Notification(4) -- event log 流程
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/notification/">
+                                <span class="chip bg-color">notification</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Android-Notification/" class="post-category">
+                                Android Notification
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-09-30
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    11 分
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="1-1-event-log定义及-log流程"><a href="#1-1-event-log定义及-log流程" class="headerlink" title="1.1 event log定义及 log流程"></a>1.1 event log定义及 log流程</h3><ul>
+<li>在event log中搜索 notification_可以看到通知各个时间段log<br>大概有 ==notification_enqueue  – notification_expansion –notification_visibility – notification_clicked – notification_canceled==</li>
+<li>//notification_enqueue  把通知放入队列，要注意status 0 post 1 update，因此看event log可能会有几个，1个post ,另外都update</li>
+<li>//notification_visibility代表通知时可见的，在下拉通知时会触发，其他情况也有</li>
+<li>//notification_expansion在灭屏亮屏，滑动后会触发</li>
+<li>//notification_clicked 点击通知时会打印此log</li>
+<li>//notification_canceled 调用NotificationManager.cancel(ID)会触发此发现，注意和notification_cancel不是一个东西</li>
+</ul>
+<pre><code>@ /frameworks/base/services/core/java/com/android/server/EventLogTags.logtags
+59# when a NotificationManager.notify is called. status: 0=post, 1=update, 2=ignored
+602750 notification_enqueue (uid|1|5),(pid|1|5),(pkg|3),(id|1|5),(tag|3),(userid|1|5),(notification|3),(status|1)
+
+7427511 notification_expansion (key|3),(user_action|1),(expanded|1),(lifespan|1),(freshness|1),(exposure|1)
+
+7627520 notification_clicked (key|3),(lifespan|1),(freshness|1),(exposure|1),(rank|1),(count|1)
+
+79# when a notification has been canceled
+8027530 notification_canceled (key|3),(reason|1),(lifespan|1),(freshness|1),(exposure|1),(rank|1),(count|1),(listener|3)
+81# replaces 27510 with a row per notification
+8227531 notification_visibility (key|3),(visibile|1),(lifespan|1),(freshness|1),(exposure|1),(rank|1)
+83# a notification emited noise, vibration, or light
+8427532 notification_alert (key|3),(buzz|1),(beep|1),(blink|1)</code></pre><h3 id="1-2-eventlog对应方法"><a href="#1-2-eventlog对应方法" class="headerlink" title="1.2 eventlog对应方法"></a>1.2 eventlog对应方法</h3><p>编译后对应的方法如下</p>
+<pre class=" language-java"><code class="language-java">out<span class="token operator">/</span>target<span class="token operator">/</span>common<span class="token operator">/</span>obj<span class="token operator">/</span>JAVA_LIBRARIES<span class="token operator">/</span>services<span class="token punctuation">.</span>core_intermediates<span class="token operator">/</span>src<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>EventLogTags<span class="token punctuation">.</span>java
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationEnqueue</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> pid<span class="token punctuation">,</span> String pkg<span class="token punctuation">,</span> <span class="token keyword">int</span> id<span class="token punctuation">,</span> String tag<span class="token punctuation">,</span> <span class="token keyword">int</span> userid<span class="token punctuation">,</span> String notification<span class="token punctuation">,</span> <span class="token keyword">int</span> status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_ENQUEUE<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> pid<span class="token punctuation">,</span> pkg<span class="token punctuation">,</span> id<span class="token punctuation">,</span> tag<span class="token punctuation">,</span> userid<span class="token punctuation">,</span> notification<span class="token punctuation">,</span> status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationCancel</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> pid<span class="token punctuation">,</span> String pkg<span class="token punctuation">,</span> <span class="token keyword">int</span> id<span class="token punctuation">,</span> String tag<span class="token punctuation">,</span> <span class="token keyword">int</span> userid<span class="token punctuation">,</span> <span class="token keyword">int</span> requiredFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> forbiddenFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> reason<span class="token punctuation">,</span> String listener<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_CANCEL<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> pid<span class="token punctuation">,</span> pkg<span class="token punctuation">,</span> id<span class="token punctuation">,</span> tag<span class="token punctuation">,</span> userid<span class="token punctuation">,</span> requiredFlags<span class="token punctuation">,</span> forbiddenFlags<span class="token punctuation">,</span> reason<span class="token punctuation">,</span> listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationCancelAll</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> pid<span class="token punctuation">,</span> String pkg<span class="token punctuation">,</span> <span class="token keyword">int</span> userid<span class="token punctuation">,</span> <span class="token keyword">int</span> requiredFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> forbiddenFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> reason<span class="token punctuation">,</span> String listener<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_CANCEL_ALL<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> pid<span class="token punctuation">,</span> pkg<span class="token punctuation">,</span> userid<span class="token punctuation">,</span> requiredFlags<span class="token punctuation">,</span> forbiddenFlags<span class="token punctuation">,</span> reason<span class="token punctuation">,</span> listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationPanelHidden</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_PANEL_HIDDEN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationVisibilityChanged</span><span class="token punctuation">(</span>String newlyvisiblekeys<span class="token punctuation">,</span> String nolongervisiblekeys<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_VISIBILITY_CHANGED<span class="token punctuation">,</span> newlyvisiblekeys<span class="token punctuation">,</span> nolongervisiblekeys<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationExpansion</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">int</span> userAction<span class="token punctuation">,</span> <span class="token keyword">int</span> expanded<span class="token punctuation">,</span> <span class="token keyword">int</span> lifespan<span class="token punctuation">,</span> <span class="token keyword">int</span> freshness<span class="token punctuation">,</span> <span class="token keyword">int</span> exposure<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_EXPANSION<span class="token punctuation">,</span> key<span class="token punctuation">,</span> userAction<span class="token punctuation">,</span> expanded<span class="token punctuation">,</span> lifespan<span class="token punctuation">,</span> freshness<span class="token punctuation">,</span> exposure<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationClicked</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">int</span> lifespan<span class="token punctuation">,</span> <span class="token keyword">int</span> freshness<span class="token punctuation">,</span> <span class="token keyword">int</span> exposure<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_CLICKED<span class="token punctuation">,</span> key<span class="token punctuation">,</span> lifespan<span class="token punctuation">,</span> freshness<span class="token punctuation">,</span> exposure<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationCanceled</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">int</span> reason<span class="token punctuation">,</span> <span class="token keyword">int</span> lifespan<span class="token punctuation">,</span> <span class="token keyword">int</span> freshness<span class="token punctuation">,</span> <span class="token keyword">int</span> exposure<span class="token punctuation">,</span> String listener<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_CANCELED<span class="token punctuation">,</span> key<span class="token punctuation">,</span> reason<span class="token punctuation">,</span> lifespan<span class="token punctuation">,</span> freshness<span class="token punctuation">,</span> exposure<span class="token punctuation">,</span> listener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">writeNotificationVisibility</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">int</span> visibile<span class="token punctuation">,</span> <span class="token keyword">int</span> lifespan<span class="token punctuation">,</span> <span class="token keyword">int</span> freshness<span class="token punctuation">,</span> <span class="token keyword">int</span> exposure<span class="token punctuation">,</span> <span class="token keyword">int</span> rank<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    android<span class="token punctuation">.</span>util<span class="token punctuation">.</span>EventLog<span class="token punctuation">.</span><span class="token function">writeEvent</span><span class="token punctuation">(</span>NOTIFICATION_VISIBILITY<span class="token punctuation">,</span> key<span class="token punctuation">,</span> visibile<span class="token punctuation">,</span> lifespan<span class="token punctuation">,</span> freshness<span class="token punctuation">,</span> exposure<span class="token punctuation">,</span> rank<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span></code></pre>
+<h3 id="1-3-各个event-log位置"><a href="#1-3-各个event-log位置" class="headerlink" title="1.3 各个event log位置"></a>1.3 各个event log位置</h3><h4 id="1-3-1-notification-enqueue-writeNotificationEnqueue"><a href="#1-3-1-notification-enqueue-writeNotificationEnqueue" class="headerlink" title="1.3.1 notification_enqueue(writeNotificationEnqueue)"></a>1.3.1 notification_enqueue(writeNotificationEnqueue)</h4><ul>
+<li>在Android P中发送通知时发现event log只打印了notification_enqueue，并不会打印后面的  notification_expansion –notification_visibility ，因此发送时间应该是<br>app发送通知时间—notification_enqueue时间–到SystemUI.createNotificationViews才是正确的时间，而不是从notification_enqueue到notification_visibility</li>
+</ul>
+<p>打开 SystemUI/src/com/android/systemui/statusbar/phone/StatusBar.java DEBUG开关用来调试</p>
+<p>writeNotificationEnqueue是在 enqueueNotificationWithTag 之后的handler中打印</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@frameworks</span><span class="token operator">/</span>base<span class="token operator">/</span>services<span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>notification<span class="token operator">/</span>NotificationManagerService<span class="token punctuation">.</span>java
+<span class="token keyword">protected</span> <span class="token keyword">class</span> <span class="token class-name">EnqueueNotificationRunnable</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> NotificationRecord r<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> userId<span class="token punctuation">;</span>
+
+    <span class="token function">EnqueueNotificationRunnable</span><span class="token punctuation">(</span><span class="token keyword">int</span> userId<span class="token punctuation">,</span> NotificationRecord r<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>userId <span class="token operator">=</span> userId<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>r <span class="token operator">=</span> r<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mNotificationLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mEnqueuedNotifications<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">scheduleTimeoutLocked</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+            <span class="token comment" spellcheck="true">// This conditional is a dirty hack to limit the logging done on</span>
+            <span class="token comment" spellcheck="true">//     behalf of the download manager without affecting other apps.</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>pkg<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"com.android.providers.downloads"</span><span class="token punctuation">)</span>
+                    <span class="token operator">||</span> Log<span class="token punctuation">.</span><span class="token function">isLoggable</span><span class="token punctuation">(</span><span class="token string">"DownloadManager"</span><span class="token punctuation">,</span> Log<span class="token punctuation">.</span>VERBOSE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">int</span> enqueueStatus <span class="token operator">=</span> EVENTLOG_ENQUEUE_STATUS_NEW<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>old <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    enqueueStatus <span class="token operator">=</span> EVENTLOG_ENQUEUE_STATUS_UPDATE<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                EventLogTags<span class="token punctuation">.</span><span class="token function">writeNotificationEnqueue</span><span class="token punctuation">(</span>callingUid<span class="token punctuation">,</span> callingPid<span class="token punctuation">,</span>
+                        pkg<span class="token punctuation">,</span> id<span class="token punctuation">,</span> tag<span class="token punctuation">,</span> userId<span class="token punctuation">,</span> notification<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment" spellcheck="true">//writeNotificationEnqueue</span>
+                        enqueueStatus<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            mRankingHelper<span class="token punctuation">.</span><span class="token function">extractSignals</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// tell the assistant service about the notification</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>mAssistants<span class="token punctuation">.</span><span class="token function">isEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                mAssistants<span class="token punctuation">.</span><span class="token function">onNotificationEnqueued</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                mHandler<span class="token punctuation">.</span><span class="token function">postDelayed</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PostNotificationRunnable</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                        DELAY_FOR_ASSISTANT_TIME<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                mHandler<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PostNotificationRunnable</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="1-3-2-notification-expansion-writeNotificationExpansion"><a href="#1-3-2-notification-expansion-writeNotificationExpansion" class="headerlink" title="1.3.2 notification_expansion(writeNotificationExpansion)"></a>1.3.2 notification_expansion(writeNotificationExpansion)</h4><p>使用测试时发现，send通知时并不会调用到这个，只发现在灭屏亮屏后可以</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@SystemUI</span><span class="token operator">/</span>src<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>systemui<span class="token operator">/</span>statusbar<span class="token operator">/</span>ExpandableNotificationRow<span class="token punctuation">.</span>java
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">onExpansionChanged</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> userAction<span class="token punctuation">,</span> <span class="token keyword">boolean</span> wasExpanded<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> nowExpanded <span class="token operator">=</span> <span class="token function">isExpanded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mIsSummaryWithChildren <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token operator">!</span>mIsLowPriority <span class="token operator">||</span> wasExpanded<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        nowExpanded <span class="token operator">=</span> mGroupManager<span class="token punctuation">.</span><span class="token function">isGroupExpanded</span><span class="token punctuation">(</span>mStatusBarNotification<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>nowExpanded <span class="token operator">!=</span> wasExpanded<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">updateShelfIconColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mLogger <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mLogger<span class="token punctuation">.</span><span class="token function">logNotificationExpansion</span><span class="token punctuation">(</span>mLoggingKey<span class="token punctuation">,</span> userAction<span class="token punctuation">,</span> nowExpanded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mIsSummaryWithChildren<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mChildrenContainer<span class="token punctuation">.</span><span class="token function">onExpansionChanged</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@SystemUI</span><span class="token operator">/</span>src<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>systemui<span class="token operator">/</span>statusbar<span class="token operator">/</span>phone<span class="token operator">/</span>StatusBar<span class="token punctuation">.</span>java
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">logNotificationExpansion</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">boolean</span> userAction<span class="token punctuation">,</span> <span class="token keyword">boolean</span> expanded<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    mUiOffloadThread<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            mBarService<span class="token punctuation">.</span><span class="token function">onNotificationExpansionChanged</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> userAction<span class="token punctuation">,</span> expanded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">RemoteException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// Ignore.</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@frameworks</span><span class="token operator">/</span>base<span class="token operator">/</span>services<span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>statusbar<span class="token operator">/</span>StatusBarManagerService<span class="token punctuation">.</span>java
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNotificationExpansionChanged</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">boolean</span> userAction<span class="token punctuation">,</span>
+        <span class="token keyword">boolean</span> expanded<span class="token punctuation">)</span> <span class="token keyword">throws</span> RemoteException <span class="token punctuation">{</span>
+    <span class="token function">enforceStatusBarService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">long</span> identity <span class="token operator">=</span> Binder<span class="token punctuation">.</span><span class="token function">clearCallingIdentity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        mNotificationDelegate<span class="token punctuation">.</span><span class="token function">onNotificationExpansionChanged</span><span class="token punctuation">(</span>
+                key<span class="token punctuation">,</span> userAction<span class="token punctuation">,</span> expanded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+        Binder<span class="token punctuation">.</span><span class="token function">restoreCallingIdentity</span><span class="token punctuation">(</span>identity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@frameworks</span><span class="token operator">/</span>base<span class="token operator">/</span>services<span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>notification<span class="token operator">/</span>NotificationDelegate<span class="token punctuation">.</span>java
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">NotificationDelegate</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">onSetDisabled</span><span class="token punctuation">(</span><span class="token keyword">int</span> status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onClearAll</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span> <span class="token keyword">int</span> userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onNotificationClick</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span> String key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onNotificationActionClick</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span> String key<span class="token punctuation">,</span> <span class="token keyword">int</span> actionIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onNotificationClear</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span>
+            String pkg<span class="token punctuation">,</span> String tag<span class="token punctuation">,</span> <span class="token keyword">int</span> id<span class="token punctuation">,</span> <span class="token keyword">int</span> userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onNotificationError</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span>
+            String pkg<span class="token punctuation">,</span> String tag<span class="token punctuation">,</span> <span class="token keyword">int</span> id<span class="token punctuation">,</span>
+            <span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> initialPid<span class="token punctuation">,</span> String message<span class="token punctuation">,</span> <span class="token keyword">int</span> userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onPanelRevealed</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> clearEffects<span class="token punctuation">,</span> <span class="token keyword">int</span> numItems<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onPanelHidden</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">onNotificationExpansionChanged</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> <span class="token keyword">boolean</span> userAction<span class="token punctuation">,</span> <span class="token keyword">boolean</span> expanded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token annotation punctuation">@frameworks</span><span class="token operator">/</span>base<span class="token operator">/</span>services<span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>notification<span class="token operator">/</span>NotificationManagerService<span class="token punctuation">.</span>java
+
+<span class="token keyword">final</span> NotificationDelegate mNotificationDelegate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">NotificationDelegate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNotificationExpansionChanged</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span>
+            <span class="token keyword">boolean</span> userAction<span class="token punctuation">,</span> <span class="token keyword">boolean</span> expanded<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mNotificationLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            NotificationRecord r <span class="token operator">=</span> mNotificationsByKey<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>r <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                r<span class="token punctuation">.</span>stats<span class="token punctuation">.</span><span class="token function">onExpansionChanged</span><span class="token punctuation">(</span>userAction<span class="token punctuation">,</span> expanded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">final</span> <span class="token keyword">long</span> now <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>userAction<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    MetricsLogger<span class="token punctuation">.</span><span class="token function">action</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span><span class="token function">getLogMaker</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span>
+                            <span class="token punctuation">.</span><span class="token function">setCategory</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>NOTIFICATION_ITEM<span class="token punctuation">)</span>
+                            <span class="token punctuation">.</span><span class="token function">setType</span><span class="token punctuation">(</span>expanded <span class="token operator">?</span> MetricsEvent<span class="token punctuation">.</span>TYPE_DETAIL
+                                    <span class="token operator">:</span> MetricsEvent<span class="token punctuation">.</span>TYPE_COLLAPSE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                EventLogTags<span class="token punctuation">.</span><span class="token function">writeNotificationExpansion</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>
+                        userAction <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span> expanded <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                        r<span class="token punctuation">.</span><span class="token function">getLifespanMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getFreshnessMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getExposureMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<pre><code>//stack如下
+08-26 07:30:48.423   849  1233 W System.err: java.lang.Exception: William Notification NMS writeNotificationExpansion:
+08-26 07:30:48.424   849  1233 W System.err:     at com.android.server.notification.NotificationManagerService$1.onNotificationExpansionChanged(NotificationManagerService.java:864)
+08-26 07:30:48.424   849  1233 W System.err:     at com.android.server.statusbar.StatusBarManagerService.onNotificationExpansionChanged(StatusBarManagerService.java:1080)
+08-26 07:30:48.424   849  1233 W System.err:     at com.android.internal.statusbar.IStatusBarService$Stub.onTransact(IStatusBarService.java:365)
+08-26 07:30:48.424   849  1233 W System.err:     at android.os.Binder.execTransact(Binder.java:731)</code></pre><h4 id="1-3-3-notification-visibility-writeNotificationVisibility"><a href="#1-3-3-notification-visibility-writeNotificationVisibility" class="headerlink" title="1.3.3 notification_visibility(writeNotificationVisibility)"></a>1.3.3 notification_visibility(writeNotificationVisibility)</h4><p>notification_visibility在通知View可见时触发，比如下拉状态栏，亮屏时PanelView也会显示</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@frameworks</span><span class="token operator">/</span>base<span class="token operator">/</span>services<span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>notification<span class="token operator">/</span>NotificationRecord<span class="token punctuation">.</span>java
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setVisibility</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> visible<span class="token punctuation">,</span> <span class="token keyword">int</span> rank<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> <span class="token keyword">long</span> now <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mVisibleSinceMs <span class="token operator">=</span> visible <span class="token operator">?</span> now <span class="token operator">:</span> mVisibleSinceMs<span class="token punctuation">;</span>
+    stats<span class="token punctuation">.</span><span class="token function">onVisibilityChanged</span><span class="token punctuation">(</span>visible<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    MetricsLogger<span class="token punctuation">.</span><span class="token function">action</span><span class="token punctuation">(</span><span class="token function">getLogMaker</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setCategory</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>NOTIFICATION_ITEM<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setType</span><span class="token punctuation">(</span>visible <span class="token operator">?</span> MetricsEvent<span class="token punctuation">.</span>TYPE_OPEN <span class="token operator">:</span> MetricsEvent<span class="token punctuation">.</span>TYPE_CLOSE<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">addTaggedData</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>NOTIFICATION_SHADE_INDEX<span class="token punctuation">,</span> rank<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>visible<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        MetricsLogger<span class="token punctuation">.</span><span class="token function">histogram</span><span class="token punctuation">(</span>mContext<span class="token punctuation">,</span> <span class="token string">"note_freshness"</span><span class="token punctuation">,</span> <span class="token function">getFreshnessMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    EventLogTags<span class="token punctuation">.</span><span class="token function">writeNotificationVisibility</span><span class="token punctuation">(</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> visible <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token function">getLifespanMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">getFreshnessMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token number">0</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// exposure time</span>
+            rank<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//stack如下</p>
+<pre><code>08-26 07:06:02.722   849  1483 W System.err: java.lang.Exception: William Notification writeNotificationVisibility:
+08-26 07:06:02.722   849  1483 W System.err:     at com.android.server.notification.NotificationRecord.setVisibility(NotificationRecord.java:818)
+08-26 07:06:02.722   849  1483 W System.err:     at com.android.server.notification.NotificationManagerService$1.onNotificationVisibilityChanged(NotificationManagerService.java:830)
+08-26 07:06:02.722   849  1483 W System.err:     at com.android.server.statusbar.StatusBarManagerService.onNotificationVisibilityChanged(StatusBarManagerService.java:1067)
+08-26 07:06:02.722   849  1483 W System.err:     at com.android.internal.statusbar.IStatusBarService$Stub.onTransact(IStatusBarService.java:352)
+08-26 07:06:02.722   849  1483 W System.err:     at android.os.Binder.execTransact(Binder.java:731)</code></pre><h4 id="1-3-4-notification-clicked-writeNotificationClicked"><a href="#1-3-4-notification-clicked-writeNotificationClicked" class="headerlink" title="1.3.4 notification_clicked(writeNotificationClicked)"></a>1.3.4 notification_clicked(writeNotificationClicked)</h4><p>点击通知时会打印此log</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@services</span><span class="token operator">/</span>core<span class="token operator">/</span>java<span class="token operator">/</span>com<span class="token operator">/</span>android<span class="token operator">/</span>server<span class="token operator">/</span>notification<span class="token operator">/</span>NotificationManagerService<span class="token punctuation">.</span>java
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNotificationClick</span><span class="token punctuation">(</span><span class="token keyword">int</span> callingUid<span class="token punctuation">,</span> <span class="token keyword">int</span> callingPid<span class="token punctuation">,</span> String key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mNotificationLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        NotificationRecord r <span class="token operator">=</span> mNotificationsByKey<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>r <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Log<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"No notification with key: "</span> <span class="token operator">+</span> key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">final</span> <span class="token keyword">long</span> now <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        MetricsLogger<span class="token punctuation">.</span><span class="token function">action</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span><span class="token function">getLogMaker</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">setCategory</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>NOTIFICATION_ITEM<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">setType</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>TYPE_ACTION<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        EventLogTags<span class="token punctuation">.</span><span class="token function">writeNotificationClicked</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>
+                r<span class="token punctuation">.</span><span class="token function">getLifespanMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getFreshnessMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getExposureMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        StatusBarNotification sbn <span class="token operator">=</span> r<span class="token punctuation">.</span>sbn<span class="token punctuation">;</span>
+        <span class="token function">cancelNotification</span><span class="token punctuation">(</span>callingUid<span class="token punctuation">,</span> callingPid<span class="token punctuation">,</span> sbn<span class="token punctuation">.</span><span class="token function">getPackageName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sbn<span class="token punctuation">.</span><span class="token function">getTag</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                sbn<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> Notification<span class="token punctuation">.</span>FLAG_AUTO_CANCEL<span class="token punctuation">,</span>
+                Notification<span class="token punctuation">.</span>FLAG_FOREGROUND_SERVICE<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getUserId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                REASON_CLICK<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//stack如下</p>
+<pre><code>08-26 07:06:03.469   849  2597 W System.err: java.lang.Exception: William Notification NMS click:
+08-26 07:06:03.470   849  2597 W System.err:     at com.android.server.notification.NotificationManagerService$1.onNotificationClick(NotificationManagerService.java:716)
+08-26 07:06:03.470   849  2597 W System.err:     at com.android.server.statusbar.StatusBarManagerService.onNotificationClick(StatusBarManagerService.java:1009)
+08-26 07:06:03.470   849  2597 W System.err:     at com.android.internal.statusbar.IStatusBarService$Stub.onTransact(IStatusBarService.java:267)
+08-26 07:06:03.470   849  2597 W System.err:     at android.os.Binder.execTransact(Binder.java:731)</code></pre><h4 id="1-3-5-notification-canceled-writeNotificationCanceled"><a href="#1-3-5-notification-canceled-writeNotificationCanceled" class="headerlink" title="1.3.5 notification_canceled(writeNotificationCanceled)"></a>1.3.5 notification_canceled(writeNotificationCanceled)</h4><p>调用NotificationManager.cancel(ID)会触发此发现，注意和notification_cancel不是一个东西</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@NMS</span><span class="token punctuation">.</span>java
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">cancelNotificationLocked</span><span class="token punctuation">(</span>NotificationRecord r<span class="token punctuation">,</span> <span class="token keyword">boolean</span> sendDelete<span class="token punctuation">,</span> <span class="token keyword">int</span> reason<span class="token punctuation">,</span>
+        <span class="token keyword">boolean</span> wasPosted<span class="token punctuation">,</span> String listenerName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> String canceledKey <span class="token operator">=</span> r<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">final</span> <span class="token keyword">long</span> now <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    MetricsLogger<span class="token punctuation">.</span><span class="token function">action</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span><span class="token function">getLogMaker</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setCategory</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>NOTIFICATION_ITEM<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setType</span><span class="token punctuation">(</span>MetricsEvent<span class="token punctuation">.</span>TYPE_DISMISS<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setSubtype</span><span class="token punctuation">(</span>reason<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    EventLogTags<span class="token punctuation">.</span><span class="token function">writeNotificationCanceled</span><span class="token punctuation">(</span>canceledKey<span class="token punctuation">,</span> reason<span class="token punctuation">,</span>
+            r<span class="token punctuation">.</span><span class="token function">getLifespanMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getFreshnessMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getExposureMs</span><span class="token punctuation">(</span>now<span class="token punctuation">)</span><span class="token punctuation">,</span> listenerName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>//stack如下</p>
+<pre><code>08-26 07:06:05.990   849   849 W System.err: java.lang.Exception: William Notification NMS cancel:
+08-26 07:06:05.990   849   849 W System.err:     at com.android.server.notification.NotificationManagerService.cancelNotificationLocked(NotificationManagerService.java:5603)
+08-26 07:06:05.990   849   849 W System.err:     at com.android.server.notification.NotificationManagerService.access$7500(NotificationManagerService.java:244)
+08-26 07:06:05.990   849   849 W System.err:     at com.android.server.notification.NotificationManagerService$14.run(NotificationManagerService.java:5772)
+08-26 07:06:05.990   849   849 W System.err:     at android.os.Handler.handleCallback(Handler.java:873)
+08-26 07:06:05.991   849   849 W System.err:     at android.os.Handler.dispatchMessage(Handler.java:99)
+08-26 07:06:05.991   849   849 W System.err:     at android.os.Looper.loop(Looper.java:193)
+08-26 07:06:05.991   849   849 W System.err:     at com.android.server.SystemServer.run(SystemServer.java:460)
+08-26 07:06:05.991   849   849 W System.err:     at com.android.server.SystemServer.main(SystemServer.java:296)
+08-26 07:06:05.991   849   849 W System.err:     at java.lang.reflect.Method.invoke(Native Method)
+08-26 07:06:05.991   849   849 W System.err:     at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+08-26 07:06:05.991   849   849 W System.err:     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:838)
+08-26 07:06:05.991   849   849 I notification_canceled: [0|com.tsp.notification|10025|null|10075,8,8425,8425,3265,-1,-1,NULL]</code></pre>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://dongwang0623.cn" rel="external nofollow noreferrer">wangdong</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://dongwang0623.cn/2019/09/30/notification/android-notification-4-event-log-liu-cheng/">http://dongwang0623.cn/2019/09/30/notification/android-notification-4-event-log-liu-cheng/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/notification/">
+                                    <span class="chip bg-color">notification</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/10/18/androidbuild/huan-jing-bian-liang-kong-zhi-source-he-prebuilt/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="环境变量控制source和prebuilt">
+                        
+                        <span class="card-title">环境变量控制source和prebuilt</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1.环境变量使用1.1 添加环境变量方法如下source build/envsetup.sh
+lunch
+export TARGET_BUILD_CHINATSP=true  //环境变量添加,在编译之前,这个应该放在服务器,本地开发者不需
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-10-18
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android-Build/" class="post-category">
+                                    Android Build
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Android-Build/">
+                        <span class="chip bg-color">Android Build</span>
+                    </a>
+                    
+                    <a href="/tags/编译/">
+                        <span class="chip bg-color">编译</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/09/30/notification/android-notification-3-systemui-qi-dong-yu-jia-zai-notification-liu-cheng/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Android Notification(3) -- SystemUi启动与加载Notification 流程">
+                        
+                        <span class="card-title">Android Notification(3) -- SystemUi启动与加载Notification 流程</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1.1 SystemServer 启动SystemUistartService SystemUIService
+@frameworks/base/services/java/com/android/server/SystemServer.j
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android-Notification/" class="post-category">
+                                    Android Notification
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/notification/">
+                        <span class="chip bg-color">notification</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">年份</span>
+            <a href="http://dongwang0623.cn" target="_blank">wangdong</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    window.setTimeout("siteTime()", 1000);
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wd623894174/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=623894174" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 623894174" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i["DaoVoiceObject"] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            a.charset = "utf-8";
+            m.parentNode.insertBefore(a, m)
+        })(window, document, "script", ('https:' == document.location.protocol ? 'https:' : 'http:') +
+            "//widget.daovoice.io/widget/6984b559.js", "daovoice")
+        daovoice('init', {
+            app_id: ""
+        });
+        daovoice('update');
+    </script>
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
