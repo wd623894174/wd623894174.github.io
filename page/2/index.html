@@ -323,6 +323,147 @@
 <main class="content">
 
     
+    <div id="indexCard" class="index-card">
+        <div class="container ">
+            <div class="card">
+                <div class="card-content">
+                    
+                        <div class="dream">
+    
+    <div class="title center-align">
+        <i class="far fa-lightbulb"></i>&nbsp;&nbsp;今日格言
+    </div>
+    
+    <div class="row">
+        <div class="col l8 offset-l2 m10 offset-m1 s10 offset-s1 center-align text">
+            土地是以它的肥沃和收获而被估价的；才能也是土地，不过它生产的不是粮食，而是真理。如果只能滋生瞑想和幻想的话，即使再大的才能也只是砂地或盐池，那上面连小草也长不出来的。 —— 别林斯基
+        </div>
+    </div>
+</div>
+                    
+
+                    
+                        
+
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
+    
+    <div class="title center-align">
+        <i class="fas fa-music"></i>&nbsp;&nbsp;音乐欣赏
+    </div>
+    
+    <div class="row">
+        <div class="col l8 offset-l2 m10 offset-m1 s12">
+            <div id="aplayer" class="music"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script>
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'false' === 'true',
+        autoplay: 'false' === 'true',
+        theme: '#42b983',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'false' === 'true',
+        listMaxHeight: '',
+        audio: eval([{"name":"day by day (Live)","artist":"T-ara","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_28684434&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"Fade","artist":"Alan Walker","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_6245379&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"我好想你","artist":"潘广益","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_902323&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"Outlaws of Love","artist":"Adam Lambert","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_24101506&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"火柴天堂","artist":"齐秦","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_150945&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"Anesthesia","artist":"Vexento","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_12546961&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"},{"name":"bye bye beautiful","artist":"NightWish","url":"http://antiserver.kuwo.cn/anti.s?useless=/resource/&format=mp3&rid=MUSIC_20273381&response=res&type=convert_url&","cover":"https://raw.githubusercontent.com/wd623894174/blogPic/master/logo/bluesky.png"}])
+    });
+});
+</script>
+                    
+
+                    
+
+                    
+                    <div id="recommend-sections" class="recommend">
+                        
+
+
+
+
+
+<div class="title"><i class="far fa-thumbs-up"></i>&nbsp;&nbsp;推荐文章</div>
+
+<div class="row">
+
+    
+    
+    <div class="col s12 m6" >
+        <div class="post-card" style="background-image: url('/medias/featureimages/7.jpg')">
+            <div class="post-body">
+                <div class="post-categories">
+                    
+                        
+                            <a href="/categories/Android-Binder/" class="category">Android Binder</a>
+                        
+                    
+                </div>
+                <a href="/2019/09/21/lunbo/aidl-shi-yong/">
+                    <h3 class="post-title">AIDL 使用</h3>
+                </a>
+                <p class="post-description">
+                    
+                        1.服务端
+
+
+//add aidl
+interface IOperationManager {
+   void operation(in 
+                    
+                </p>
+                <a href="/2019/09/21/lunbo/aidl-shi-yong/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FF5E3A 0%, #FF2A68 100%)" target="_blank">
+                    <i class="icon far fa-eye fa-fw"></i>阅读更多
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col s12 m6" >
+        <div class="post-card" style="background-image: url('/medias/featureimages/20.jpg')">
+            <div class="post-body">
+                <div class="post-categories">
+                    
+                        
+                            <a href="/categories/Android-Binder/" class="category">Android Binder</a>
+                        
+                    
+                </div>
+                <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/">
+                    <h3 class="post-title">Binder调用结构流程图</h3>
+                </a>
+                <p class="post-description">
+                    
+                        参考link:
+
+http://gityuan.com/2016/09/04/binder-start-service/   //彻底理解A
+                    
+                </p>
+                <a href="/2019/09/21/lunbo/binder-diao-yong-jie-gou-liu-cheng-tu/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #EF4DB6 0%, #C643FC 100%)" target="_blank">
+                    <i class="icon far fa-eye fa-fw"></i>阅读更多
+                </a>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     
 
